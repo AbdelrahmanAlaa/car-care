@@ -1,8 +1,7 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-// schema for defining user schema 
+//defining user schema 
 const schema = new mongoose.Schema({
-
     name: {
         type: String,
     },
@@ -20,13 +19,13 @@ const schema = new mongoose.Schema({
     }
 })
 const User = mongoose.model('User', schema);
-// function that validate user data 
+// validate user data 
 function validateUser(user) {
     const schema = Joi.object({
         name: Joi.string().min(5).max(50).required(),
         email: Joi.string().min(5).max(255).required().email(),
         password: Joi.string().min(8).max(255).required(),
-        confirmPassword: Joi.string().min(8).max(255).required(),
+        confirmPassword: Joi.string().min(8).max(255).required().valid(user.password),
         Gender: Joi.string().required()
     });
     return Joi.validate(user, schema);
