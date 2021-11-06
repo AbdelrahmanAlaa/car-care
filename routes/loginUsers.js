@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const { User } = require('../models/userModel');
@@ -8,22 +8,22 @@ const router = express.Router();
 router.post('/', async (req, res) => {
     // First Validate The HTTP Request
     const { error } = validate(req.body);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-    }
+    if (error) return res.status(400).json({
+        mssage:"faild",
+        error:error.details[0].message})
 
     //  Now find the user by their email address
     let user = await User.findOne({ email: req.body.email });
-    if (!user) {
-        return res.status(400).send('Incorrect email or password.');
-    }
+    if (!user) return res.status(400).json({
+        message:"faild",
+        error:'Incorrect email or password.'});
 
     // Then validate the Credentials in MongoDB match
     // those provided in the request
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) {
-        return res.status(400).send('Incorrect email or password.');
-    }
+    if (!validPassword)return res.status(400).json({
+        message:"faild",
+        error:'Incorrect email or password.'});
 
     res.send(true);
 });
