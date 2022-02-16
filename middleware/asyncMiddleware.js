@@ -1,7 +1,7 @@
-module.exports = function (handelr) {
+module.exports = function (handler) {
     return async (req , res , next ) =>{
     try{
-      await handelr(req , res)
+      await handler(req , res)
     } 
     catch(ex){
         

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 //defining user schema 
@@ -25,6 +26,7 @@ const schema = new mongoose.Schema({
     password: {
         type: String,
     },
+    
     confirmPassword: {
         type: String,
     },
@@ -39,7 +41,9 @@ const schema = new mongoose.Schema({
     },
     dateOfBirthday:{
         type:String
-    }                                                                                                        
+    },
+    passwordRestToken:String,
+    passwordRestExpires:Date
 })
 schema.index({location:"2dsphere"});
 schema.index({name:1})
@@ -74,5 +78,23 @@ exports.validateLogin = (req)=> {
     return Joi.validate(req, schema);
 }
 
+exports.validateRestPassword = (user)=> {
+    const schema = {
+         password: Joi.string().min(5).max(255).required() , 
+         confirmPassword:Joi.string().min(8).max(255).required().equal(user.password)
+        };
+
+    return Joi.validate(user, schema);
+}
+
+exports.creatRandomPassword = function(){
+    const restToken = crypto.randomBytes(32).toString('hex');
+
+    passwordRestToken=crypto.createHash('sha256').update(restToken).digest('hex');
+    passwordRestExpires=Date.now() +10 * 60 *1000
+
+    console.log(restToken);
+    return restToken ;
+}
 
 exports.Worker = Worker;

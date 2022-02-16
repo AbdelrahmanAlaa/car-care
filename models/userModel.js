@@ -43,16 +43,23 @@ exports.validateUser = (user)=>{
     return Joi.validate(user, schema);
 }
 // rest password ... 
-//course of jonas in folder 10 vidio 12
-function creatRoundomPassword (){
+//course of jonas in folder 10 video 12
+
+
+
+exports.creatRandomPassword = function(){
     const restToken = crypto.randomBytes(32).toString('hex');
-    this.passwordRestToken  =crypto
+    
+    passwordRestToken = crypto
     .createHash('sha256')
     .update(restToken)
     .digest('hex');
-    console.log({restToken} , this.passwordRestToken)
-    this.passwordRestExpires =Date.now() +10 * 60 * 1000;
+
+    passwordRestExpires=Date.now() +10 * 60 *1000
+    // console.log({restToken},this.passwordRestToken);
+    return restToken;
 }
+
 
 exports.validateLogin = (req)=> {
     const schema = {
@@ -63,6 +70,14 @@ exports.validateLogin = (req)=> {
     return Joi.validate(req, schema);
 }
 
-exports.roundomPassword = creatRoundomPassword;
+exports.validateRestPassword = (user)=> {
+    const schema = {
+         password: Joi.string().min(5).max(255).required() , 
+         confirmPassword:Joi.string().min(8).max(255).required().equal(user.password)
+        };
+
+    return Joi.validate(user, schema);
+}
+
 exports.User = User;
 exports.schemaUser = schema;

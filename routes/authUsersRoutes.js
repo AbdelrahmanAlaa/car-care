@@ -1,12 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const authUsers = require('./../controller/authUsersController');
+const auth = require('../middleware/auth'); // here we call oue middleware for protect routes ... 
+
+
+router 
+.route('/getUsers')
+.get(auth ,authUsers.getAllUser);
+
 
 router 
 .route('/signUser')
 .post(authUsers.creatUser)
-.get(authUsers.getAllUser)
+// .get(auth , authUsers.getAllUser)
 
+router
+.route('/loginUser')
+.post(authUsers.loginUser)
+// .get(auth,authUsers.getAllUser);
+
+router
+.route('/forgetPassword')
+.post(authUsers.forgetPassword);
+
+router
+.route('/restPassword/:token')
+.patch(authUsers.restPassword);
 
 router
 .route('/findLocation/within/:distance/center/:latlng/unit/:unit')
@@ -16,6 +35,5 @@ router
 .route('/findLocation/distance/:latlng/unit/:unit')
 .get(authUsers.getDistance)
 
-router.post('/loginUser', authUsers.loginUser);
 
 module.exports = router ; 
