@@ -8,7 +8,7 @@ const authWorkerController  = require('./../controller/authWorkerController');
 router
   .route('/signWorker')
   .post(authWorkerController.creatWorker)
-  .get(authWorkerController.getWorker)
+  
 
   router.post('/loginWorker' ,authWorkerController.loginWorker)
 
@@ -22,5 +22,8 @@ router
 
   router 
   .route('/getWorker')
-  .get(auth ,authWorkerController.getWorker)
-module.exports = router;
+  .get(authWorkerController.getWorker)
+
+  
+
+  module.exports = router;

@@ -6,7 +6,7 @@ const auth = require('../middleware/auth'); // here we call oue middleware for p
 
 router 
 .route('/getUsers')
-.get(auth ,authUsers.getAllUser);
+.get(authUsers.getAllUser);
 
 
 router 
@@ -17,7 +17,6 @@ router
 router
 .route('/loginUser')
 .post(authUsers.loginUser)
-// .get(auth,authUsers.getAllUser);
 
 router
 .route('/forgetPassword')
