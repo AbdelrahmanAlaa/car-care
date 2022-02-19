@@ -1,5 +1,5 @@
-const crypto =require('crypto');
-const bcrypt = require('bcrypt');
+const crypto =require('cryptojs');
+const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 const { User, validateUser,validateLogin,creatRandomPassword,validateRestPassword} = require('../models/userModel');
 const asyncError=require('../middleware/asyncMiddleware');
