@@ -1,4 +1,4 @@
-const crypto =require('cryptojs');
+const crypto =require('crypto');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 const { User, validateUser,validateLogin,creatRandomPassword,validateRestPassword} = require('../models/userModel');
