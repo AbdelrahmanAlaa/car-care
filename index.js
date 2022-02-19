@@ -20,7 +20,7 @@ app.use('/api/', getUsers);
 app.use('/api/', loginSignWorker);
 // app.use('/api/forgetPassword', forgetPassword);
 
-mongoose.connect("mongodb://localhost:27017/graduationproject", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.CONNECT_DB, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected is done ')
         const port = process.env.PORT || 3030;
