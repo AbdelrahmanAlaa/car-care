@@ -1,3 +1,5 @@
 {
-    "jwtPrivateKey":"can-you-think-about-this-keyword-shfajhdjfklsjfljslkjfkjslfj"
+    "jwtPrivateKey":"can-you-think-about-this-keyword-shfajhdjfklsjfljslkjfkjslfj",
+    "connectdb":"mongodb+srv://abdoalaa:zI8Pi68MptLVMm1r@database.9ygh0.mongodb.net/database?retryWrites=true&w=majority"
+    
 }

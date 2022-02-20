@@ -1,7 +1,8 @@
 const { limiter } = require('./middleware/limiter');
 const Joi = require('joi');
-const config = require('config');
+// const config = require('config');
 Joi.objectId = require('joi-objectid')(Joi);
+require('dotenv').config({ path: 'ENV_FILENAME' }); 
 const mongoose = require('mongoose');
 const location = require('./routes/location');
 const getUsers = require('./routes/authUsersRoutes');
@@ -20,7 +21,8 @@ app.use('/api/', getUsers);
 app.use('/api/', loginSignWorker);
 // app.use('/api/forgetPassword', forgetPassword);
 
-mongoose.connect("mongodb://localhost:27017/graduationproject", { useNewUrlParser: true, useUnifiedTopology: true })
+
+mongoose.connect(process.env.CONNECT_DB, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected is done ')
         const port = process.env.PORT || 3030;
@@ -29,10 +31,10 @@ mongoose.connect("mongodb://localhost:27017/graduationproject", { useNewUrlParse
     .catch((err) => { console.log('something is wrong .. ', err) });
 
 
-    if (!config.get('jwtPrivateKey')){
-        console.log('FATAL ERROR : jwtPrivateKey is not defined ')
-        // exit(0);
-      }
+    // if (!config.get('jwtPrivateKey')){
+    //     console.log('FATAL ERROR : jwtPrivateKey is not defined ')
+    //     // exit(0);
+    //   }
 
 
 
