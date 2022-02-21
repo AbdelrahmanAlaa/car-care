@@ -21,9 +21,6 @@ const schema = new mongoose.Schema({
         type: String
 
     },
-    Gender: {
-        type: String,
-    },
     passwordRestToken:String,
     passwordRestExpires:Date
 })
@@ -37,7 +34,6 @@ exports.validateUser = (user)=>{
         email: Joi.string().min(5).max(255).required().email(),
         password: Joi.string().min(8).max(255).required(),
         confirmPassword: Joi.string().min(8).max(255).required().valid(user.password),
-        Gender: Joi.string().required(),
         phone:Joi.string().required()
     });
     return Joi.validate(user, schema);
@@ -78,6 +74,18 @@ exports.validateRestPassword = (user)=> {
 
     return Joi.validate(user, schema);
 }
+
+exports.validateUpdate = (user)=> {
+    const schema = {
+        name: Joi.string().min(5).max(50),
+        email: Joi.string().min(5).max(255).email(),
+        phone:Joi.string()
+        };
+
+    return Joi.validate(user, schema);
+}
+
+
 
 exports.User = User;
 exports.schemaUser = schema;

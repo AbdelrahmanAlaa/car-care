@@ -7,34 +7,38 @@ const _ = require('lodash');
 const { Worker, validateLogin , validateWorker,creatRandomPassword,validateRestPassword } = require('./../models/workerModel');
 const asyncError=require('./../middleware/asyncMiddleware')
 
-
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN
     });
   };
   
-exports.getWorker = async(req,res)=>{
+exports.getWorker = asyncError(async(req,res)=>{
+    const key = req.params.key;
+    if(key != process.env.KEY)res.status(400).send({
+        status:'failed',
+        message:'you cant have access to open ...!!'
+    });
     const worker = await Worker.find()
     res.send({
-        msg:"success" ,
+        message:"success" ,
         worker
     })
-}
+})
 
 // add a new Worker
 exports.creatWorker = asyncError(async (req, res) => {
     // First Validate The Request
     const { error } = validateWorker(req.body);
-    if (error) return res.status(400).json({
-        msg :"fail",
+    if (error) return res.status(400).send({
+        status:'failed',
         error :error.details[0].message});
     
     // Check if this Worker already exist
     let worker = await Worker.findOne({ email: req.body.email });
-    if (worker) return res.status(400).json({
-            msg:"fail",
-            error :'That email already exist..!'});
+    if (worker) return res.status(400).send({
+        status:'failed',
+        message :'That email already exist..!'});
     
         worker = new Worker({
             name:req.body.name,
@@ -44,7 +48,7 @@ exports.creatWorker = asyncError(async (req, res) => {
             phone:req.body.phone,
             IDNumber:req.body.IDNumber, 
             location:req.body.location,
-            
+              
         });
         
         worker.confirmPassword=undefined ;
@@ -55,7 +59,7 @@ exports.creatWorker = asyncError(async (req, res) => {
         const token = jwt.sign({_id : worker._id} , config.get('jwtPrivateKey'));
 
         res.send({
-            msg:"success",
+            status:'success',
             token,
             Worker:_.pick(worker, ['_id', 'name', 'email'])
         });
@@ -66,26 +70,26 @@ exports.creatWorker = asyncError(async (req, res) => {
 exports.loginWorker = asyncError( async (req, res) => {
     // First Validate The Request of the body 
     const { error } = validateLogin(req.body);
-    if (error) return res.status(400).json({
-        massage:"failed",
+    if (error) return res.status(400).send({
+        status:"failed",
         error:error.details[0].message})
 
     //  Now find the worker by their email address
     let worker = await Worker.findOne({ email: req.body.email });
-    if (!worker) return res.status(400).json({
-        message:"failed",
-        error:'Incorrect email or password.'});
+    if (!worker) return res.status(400).send({
+        status:"failed",
+        message:'Incorrect email or password.'});
 
     // Then validate the Credentials in MongoDB match
     // those provided in the request
     const validPassword = await bcrypt.compare(req.body.password, worker.password);
-    if (!validPassword)return res.status(400).json({
-        message:"failed",
-        error:'Incorrect email or password.'});
+    if (!validPassword)return res.status(400).send({
+        status:"failed",
+        message:'Incorrect email or password.'});
         const token = jwt.sign({_id:worker._id},config.get('jwtPrivateKey'));
         
         res.send({
-        msg:"success",
+        status:"success",
         token,
         Worker:_.pick(worker,['_id','name','email',''])
     });
@@ -94,7 +98,7 @@ exports.loginWorker = asyncError( async (req, res) => {
 exports.forgetPassword =asyncError(async(req,res)=>{
 
     let worker =await Worker.findOne({email:req.body.email});
-    if(!worker)return res.status(404).json({    
+    if(!worker)return res.status(404).send({    
      status :'failed',
      error : 'this email is not found ..!'
 }) ;
@@ -135,7 +139,7 @@ catch(err){
 exports.restPassword = asyncError(async(req,res)=>{
 
     const {error}=validateRestPassword(req.body);
-    if(error)return res.status(400).json({
+    if(error)return res.status(400).send({
         status:'failed',
         error:error.details[0].message
     });
@@ -156,7 +160,7 @@ exports.restPassword = asyncError(async(req,res)=>{
 
     await worker.save();
     const token = jwt.sign({_id : worker._id} , config.get('jwtPrivateKey')); 
-    res.status(200).json({
+    res.status(200).send({
     status:'success',
     token
 })

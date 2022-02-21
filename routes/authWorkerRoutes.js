@@ -21,7 +21,7 @@ router
   .patch(authWorkerController.restPassword);
 
   router 
-  .route('/getWorker')
+  .route('/:key/getWorker')
   .get(authWorkerController.getWorker)
 
   
