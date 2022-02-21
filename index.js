@@ -17,7 +17,7 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
-app.user(cors());
+app.use(cors());
 
 app.use('/api',limiter)
 app.use('/api/',location);
