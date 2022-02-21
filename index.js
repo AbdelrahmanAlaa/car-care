@@ -24,6 +24,11 @@ app.use('/api/', getUsers);
 app.use('/api/', loginSignWorker);
 // app.use('/api/forgetPassword', forgetPassword);
 
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next()
+});
 
 mongoose.connect(process.env.CONNECT_DB, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
