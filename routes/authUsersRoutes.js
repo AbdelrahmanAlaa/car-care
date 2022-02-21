@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const authUsers = require('./../controller/authUsersController');
 const auth = require('../middleware/auth'); // here we call oue middleware for protect routes ... 
+const multer = require('multer');
+const upload = multer({dest:'img/user'});
 
-
+  
 router 
-.route('/getUsers')
+.route('/:key/getUsers')
 .get(authUsers.getAllUser);
 
 

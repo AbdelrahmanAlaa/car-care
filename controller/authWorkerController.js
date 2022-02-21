@@ -41,13 +41,12 @@ exports.creatWorker = asyncError(async (req, res) => {
             email:req.body.email,
             password:req.body.password,
             confirmPassword:req.body.confirmPassword,
-            Gender:req.body.Gender,
             phone:req.body.phone,
+            IDNumber:req.body.IDNumber, 
             location:req.body.location,
-            pic:req.body.pic,
-            dateOfBirthday:req.body.dateOfBirthday,
-            location:req.body.location
+            
         });
+        
         worker.confirmPassword=undefined ;
         const salt = await bcrypt.genSalt(10);
         worker.password = await bcrypt.hash(worker.password, salt);

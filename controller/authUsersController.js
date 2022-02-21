@@ -9,14 +9,19 @@ const config =require('config')
 const {Worker}=require('../models/workerModel');
 
 
-exports.getAllUser = async(req,res,next)=>{
-    const user = await User.find();
+exports.getAllUser = asyncError(async(req,res,next)=>{
+    const key = req.params.key;
+    if(key != process.env.KEY)res.status(400).json({
+        status:'failed',
+        message:'you cant have access to open ...!!'
+    });
+  const user = await User.find();
     res.json({
         status:200,
         msg:"success",
         user
     });
-}
+})
 // creat user 
 
 exports.creatUser = asyncError(async (req, res,next) => {

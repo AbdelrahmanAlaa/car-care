@@ -1,21 +1,24 @@
 const { limiter } = require('./middleware/limiter');
 const Joi = require('joi');
-// const config = require('config');
+const config = require('config');
 Joi.objectId = require('joi-objectid')(Joi);
-require('dotenv').config({ path: 'ENV_FILENAME' }); 
+const dotenv = require('dotenv')
 const mongoose = require('mongoose');
 const location = require('./routes/location');
 const getUsers = require('./routes/authUsersRoutes');
 const loginSignUser = require('./routes/authUsersRoutes');
 const loginSignWorker = require('./routes/authWorkerRoutes');
-// const forgetPassword = require('./routes/forgetPassword');
+
+dotenv.config({
+  path: `${__dirname}/config/config.env`,
+})
 
 const express = require('express');
 const app = express();
-
+const key = process.env.KEY;
 app.use('/api',limiter)
 app.use(express.json());
-app.use('/api/', location);
+app.use('/api/',location);
 app.use('/api/', loginSignUser);
 app.use('/api/', getUsers);
 app.use('/api/', loginSignWorker);
@@ -31,10 +34,10 @@ mongoose.connect(process.env.CONNECT_DB, { useNewUrlParser: true, useUnifiedTopo
     .catch((err) => { console.log('something is wrong .. ', err) });
 
 
-    // if (!config.get('jwtPrivateKey')){
-    //     console.log('FATAL ERROR : jwtPrivateKey is not defined ')
-    //     // exit(0);
-    //   }
+    if (!config.get('jwtPrivateKey')){
+        console.log('FATAL ERROR : jwtPrivateKey is not defined ')
+        // exit(0);
+      }
 
 
 
