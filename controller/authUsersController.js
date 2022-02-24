@@ -61,13 +61,13 @@ exports.getAllUser = asyncError(async(req,res,next)=>{
 exports.creatUser = asyncError(async (req, res,next) => {
     // First Validate The Request
     const { error } = validateUser(req.body);
-    if (error) return res.status(400).send({
+    if (error) return json{
         status :"fail",
-        error :error.details[0].message});
+        message :error.details[0].message});
     
     // Check if this user already exist
     let user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).send({
+    if (user) return res.status(400).json({
            status:"fail",
             message :'That user already exist!'});
     
@@ -78,7 +78,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
         const token = jwt.sign({_id : user._id} , config.get('jwtPrivateKey')); 
 
         res.header('x-auth-token',token)
-        .status(200).send({
+        .status(200).json({
             status:"success",
             user:_.pick(user, ['_id', 'name', 'email']),
             token
