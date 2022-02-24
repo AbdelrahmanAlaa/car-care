@@ -61,7 +61,7 @@ exports.getAllUser = asyncError(async(req,res,next)=>{
 exports.creatUser = asyncError(async (req, res,next) => {
     // First Validate The Request
     const { error } = validateUser(req.body);
-    if (error) return json{
+    if (error) return res.status(400).json({
         status :"fail",
         message :error.details[0].message});
     
