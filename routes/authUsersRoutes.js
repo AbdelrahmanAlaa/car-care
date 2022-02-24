@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const authUsers = require('./../controller/authUsersController');
 const auth = require('../middleware/auth'); // here we call oue middleware for protect routes ... 
-const multer = require('multer');
-const upload = multer({dest:'img/user'});
-  
-router.patch('/uploadImg',upload.single('photo'),authUsers.uploadImg)
+const multerConfig = require('../middleware/multer');
 
+router.post('/uploadImg', multerConfig, authUsers.uploadImg)
+
+  
 // router
 // .route('/updateMe')
 // .patch(auth , authUsers.updateUser);
@@ -14,6 +14,11 @@ router.patch('/uploadImg',upload.single('photo'),authUsers.uploadImg)
 router 
 .route('/:key/getUsers')
 .get(authUsers.getAllUser);
+
+
+router 
+.route('/:key/:id')
+.get(authUsers.getUser);
 
 
 router 

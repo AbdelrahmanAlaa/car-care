@@ -3,9 +3,9 @@ const Joi = require('joi');
 const config = require('config');
 Joi.objectId = require('joi-objectid')(Joi);
 const dotenv = require('dotenv')
-const mongoose = require('mongoose');
-const location = require('./routes/location');
-const getUsers = require('./routes/authUsersRoutes');
+const mongoose = require('mongoose');;
+
+
 const loginSignUser = require('./routes/authUsersRoutes');
 const loginSignWorker = require('./routes/authWorkerRoutes');
 const cors = require('cors');
@@ -17,20 +17,15 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
-app.user(cors());
+app.use(cors());
+
+// 111111111111111111111111
+app.use(express.static('img'))
 
 app.use('/api',limiter)
-app.use('/api/',location);
-app.use('/api/', loginSignUser);
-app.use('/api/', getUsers);
-app.use('/api/', loginSignWorker);
+app.use('/api/users', loginSignUser);
+app.use('/api/worker', loginSignWorker);
 // app.use('/api/forgetPassword', forgetPassword);
-
-app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next()
-});
 
 
 mongoose.connect(process.env.CONNECT_DB, { useNewUrlParser: true, useUnifiedTopology: true })

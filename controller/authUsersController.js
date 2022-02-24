@@ -7,67 +7,64 @@ const sendEmail=require('../middleware/email');
 const jwt =require('jsonwebtoken');
 const config =require('config')
 const {Worker}=require('../models/workerModel');
-const {Photo} = require('../models/img')
+
+
+const upload =require('../middleware/cloudinary'); 
+const {Image}=require('../models/img');
 
 exports.uploadImg = asyncError(async (req,res)=>{
 
-    
-console.log(req.file);
-console.log(req.body);
-    let img =new Photo({
-        photo :req.body.photo
-    }) 
-    await img.save();
-    res.send(img);
-
+    const result = await upload.uploads(req.files[0].path);
+    console.log(result)
+    const uploadImage = new Image ({
+        image:req.files[0].originalname,
+        url:result.url
+    });
+   const asw =  await uploadImage.save()
+res.json(asw);
 
 })
-// exports.updateUser  =asyncError(async(req,res)=>{
-//     if (req.body.password || req.body.passwordConfirm){
-//         res.status(400).json({ 
-//             status:'failed',
-//             message:'this route is not for password update '
-//         })}
-
-//         const{error}=validateUpdate(req.body);
-//         if (error) return res.status(400).send({
-//             status :"failed",
-//             error :error.details[0].message});
-
-//             const updateUser = await User.findByIdAndUpdate(req.user.id) 
-//             res.status(200).json({
-//                 status:"success",
-//                 user:updateUser
-//             });
-
-
-//     })
-
-
 exports.getAllUser = asyncError(async(req,res,next)=>{
     const key = req.params.key;
-    if(key != process.env.KEY)res.status(400).send({
+    if(key != process.env.KEY)res.status(400).json({
         status:'failed',
         message:'you cant have access to open ...!!'
     });
   const user = await User.find();
-    res.send({
+    res.json({
         status:"success",
         user
     });
+})
+exports.getUser = asyncError(async(req,res,next)=>{
+    const key = req.params.key;
+    if(key != process.env.KEY)res.status(400).json({
+        status:'failed',
+        message:'you cant have access to open ...!!'
+    });
+  const user = await User.findById(req.params.id);
+  if(!user)return res.status(404).json({ 
+      status:'failed',
+      message:'invalid id number..'}) 
+
+  res.json({
+        status:"success",
+        user
+    });
+
 })
 // creat user 
 
 exports.creatUser = asyncError(async (req, res,next) => {
     // First Validate The Request
     const { error } = validateUser(req.body);
-    if (error) return res.status(400).send({
+    if (error) return res.status(400).json({
         status :"fail",
-        error :error.details[0].message});
+        message :error.details[0].message});
     
     // Check if this user already exist
     let user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).send({
+    if (user) return res.status(400).json({
            status:"fail",
             message :'That user already exist!'});
     
@@ -78,7 +75,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
         const token = jwt.sign({_id : user._id} , config.get('jwtPrivateKey')); 
 
         res.header('x-auth-token',token)
-        .status(200).send({
+        .status(200).json({
             status:"success",
             user:_.pick(user, ['_id', 'name', 'email']),
             token
@@ -91,28 +88,28 @@ exports.creatUser = asyncError(async (req, res,next) => {
 exports.loginUser =asyncError( async (req, res, next) => {
     // First Validate The HTTP Request
     const { error } = validateLogin(req.body);
-    if (error) return res.status(400).send({
+    if (error) return res.status(400).json({
         status:"failed",
-        error:error.details[0].message})
+        message:error.details[0].message})
 
     //  check email and password is exact
     let user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send({
+    if (!user) return res.status(400).json({
         status:"failed",
         message:'Incorrect email or password.'
     });
         //compare password with coming in req and database : 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword)return res.status(400).send({
+    if (!validPassword)return res.status(400).json({
         status:"failed",
         message:'Incorrect email or password.'});
 
         const token = jwt.sign({_id : user._id} , config.get('jwtPrivateKey')); 
         
-        // we here send token in header with name : x-auth-token 
+        // we here json token in header with name : x-auth-token 
 
         res.header('x-auth-token',token)
-        .status(200).send({
+        .status(200).json({
             status:"success", 
             token,
             user:_.pick(user, ['_id', 'name', 'email'])         
@@ -123,14 +120,14 @@ exports.forgetPassword =asyncError( async(req,res)=>{
     
 
     let user =await User.findOne({email:req.body.email});
-    if(!user)res.status(404).send({
+    if(!user)res.status(404).json({
         status :'failed',
         message : 'this email is not found ..!'
  });
     const restToken =creatRandomPassword();
     user.passwordRestToken =passwordRestToken
     user.passwordRestExpires =passwordRestExpires 
-    // res.send(passwordRestToken)
+    // res.json(passwordRestToken)
     await user.save();
 
     const restURL = `${req.protocol}://${req.get('host')}/api/v1/users/restPassword/${restToken}`;
@@ -144,16 +141,16 @@ exports.forgetPassword =asyncError( async(req,res)=>{
         subject :'your password reset token (valid for 10 min)',
         status
     });
-    res.status(200).send({
+    res.status(200).json({
         status:'success',
-        status:'token sent to email'
+        message:'token sent to email'
     })}
 
     catch(err){
         user.passwordRestToken =undefined;
         user.passwordRestExpires=undefined;
 
-        return res.status(500).send('there was an error sending the email , try again later !!')
+        return res.status(500).json('there was an error jsoning the email , try again later !!')
     }
 
 })
@@ -161,9 +158,9 @@ exports.forgetPassword =asyncError( async(req,res)=>{
 exports.restPassword=async(req,res)=>{
     
     const {error}=validateRestPassword(req.body)
-    if(error)return res.status(404).send({
+    if(error)return res.status(404).json({
         status:'failed',
-        error:error.details[0].message
+        message:error.details[0].message
     })
     const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
     const user = await User.findOne({
@@ -171,7 +168,7 @@ exports.restPassword=async(req,res)=>{
          passwordRestExpires:{$gt:Date.now()}
          });
          
-            if(!user)return res.status(400).send('Token is invalid or expired ..')
+            if(!user)return res.status(400).json('Token is invalid or expired ..')
             
          const salt = await bcrypt.genSalt(10);
          user.password = await bcrypt.hash(user.password, salt);
@@ -182,7 +179,7 @@ exports.restPassword=async(req,res)=>{
 
         await user.save();
         const token = jwt.sign({_id : user._id} , config.get('jwtPrivateKey')); 
-    res.status(200).send({
+    res.status(200).json({
         status:'success',
         token
     })
@@ -198,14 +195,14 @@ exports.getLocation = asyncError(async(req,res,next)=>{
       'location.coordinates':{$geoWithin: { $centerSphere: [ [ lat, lng ],radies ]}}
     });
 
-    res.status(200).send({
+    res.status(200).json({
         "status":"success",
         "result":worker.length,
         data:worker
     });
 
  if(!lat || !lng){
-        res.status(400).send({"status":"you can provide your lat and lng.."});   
+        res.status(400).json({"status":"you can provide your lat and lng.."});   
     
 }
 });
@@ -215,7 +212,7 @@ exports.getDistance=asyncError(async(req,res)=>{
     const [lat ,lng]=latlng.split(',');
     
     if(!lat || !lng){
-        res.status(400).send({"status":"error you must provied your lat and lng .."});
+        res.status(400).json({"status":"error you must provied your lat and lng .."});
     }
 
     const distance = await Worker.aggregate([
@@ -230,7 +227,7 @@ exports.getDistance=asyncError(async(req,res)=>{
         }
     ]);
     
-    res.status(200).send({
+    res.status(200).json({
         'status':'success',
         data:distance
     });

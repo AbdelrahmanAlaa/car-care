@@ -72,7 +72,7 @@ exports.loginWorker = asyncError( async (req, res) => {
     const { error } = validateLogin(req.body);
     if (error) return res.status(400).send({
         status:"failed",
-        error:error.details[0].message})
+        message:error.details[0].message})
 
     //  Now find the worker by their email address
     let worker = await Worker.findOne({ email: req.body.email });
@@ -100,7 +100,7 @@ exports.forgetPassword =asyncError(async(req,res)=>{
     let worker =await Worker.findOne({email:req.body.email});
     if(!worker)return res.status(404).send({    
      status :'failed',
-     error : 'this email is not found ..!'
+     message : 'this email is not found ..!'
 }) ;
 
 const restToken = creatRandomPassword();
@@ -141,7 +141,7 @@ exports.restPassword = asyncError(async(req,res)=>{
     const {error}=validateRestPassword(req.body);
     if(error)return res.status(400).send({
         status:'failed',
-        error:error.details[0].message
+        message:error.details[0].message
     });
     
     const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
