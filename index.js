@@ -19,6 +19,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.static('img'))
+<<<<<<< HEAD
+=======
+
+>>>>>>> 67a5873a6c89c9a225f0bc3ae85b53f0104bbdeb
 app.use('/api',limiter)
 app.use('/api/users', users);
 app.use('/api/worker', workers);
