@@ -5,6 +5,14 @@ const validator=require('validator')
 //defining user schema 
 const schema = new mongoose.Schema({
    
+    photo:{
+        type:String,
+        
+    } ,
+       url:{
+           type:String,
+           default:'default.png'
+        } ,
     name: {
         type: String,
     },
@@ -21,6 +29,9 @@ const schema = new mongoose.Schema({
         type: String
 
     },
+    job:{
+        type:String
+    },
     passwordRestToken:String,
     passwordRestExpires:Date
 })
@@ -34,7 +45,8 @@ exports.validateUser = (user)=>{
         email: Joi.string().min(5).max(255).required().email(),
         password: Joi.string().min(8).max(255).required(),
         confirmPassword: Joi.string().min(8).max(255).required().valid(user.password),
-        phone:Joi.string().required()
+        phone:Joi.string().required(),
+        job:Joi.string().min(2).max(255).required()
     });
     return Joi.validate(user, schema);
 }
@@ -78,8 +90,8 @@ exports.validateRestPassword = (user)=> {
 exports.validateUpdate = (user)=> {
     const schema = {
         name: Joi.string().min(5).max(50),
-        email: Joi.string().min(5).max(255).email(),
-        phone:Joi.string()
+        phone:Joi.string(),
+        job:Joi.string()
         };
 
     return Joi.validate(user, schema);

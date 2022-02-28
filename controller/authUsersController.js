@@ -1,56 +1,51 @@
 const crypto =require('crypto');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
-const { User, validateUser,validateLogin,creatRandomPassword,validateRestPassword,validateUpdate} = require('../models/userModel');
+const { User, validateUser,validateLogin,creatRandomPassword,validateRestPassword} = require('../models/userModel');
 const asyncError=require('../middleware/asyncMiddleware');
 const sendEmail=require('../middleware/email');
 const jwt =require('jsonwebtoken');
 const config =require('config')
 const {Worker}=require('../models/workerModel');
-
-
 const upload =require('../middleware/cloudinary'); 
 const {Image}=require('../models/img');
+const fs = require('fs');
+
+
+
+
+
+exports.auth = async(req,res,next)=>{
+    const token = req.header('x-auth-token');
+    if(!token)return res.status(401).send('access denied . no token provided  ')
+  
+    try{ 
+    const decoded = await jwt.verify(token , config.get('jwtPrivateKey'));
+    req.user= decoded ;
+    // console.log(decoded)
+    next();
+   }
+   catch(ex){
+       res.status(400).send('invalid token ');
+   }
+}
+
+
 
 exports.uploadImg = asyncError(async (req,res)=>{
 
     const result = await upload.uploads(req.files[0].path);
-    console.log(result)
+    // console.log(result)
     const uploadImage = new Image ({
         image:req.files[0].originalname,
         url:result.url
     });
-   const asw =  await uploadImage.save()
+   const asw =  await uploadImage.save();
+   
+   // delete my photo local after upload to cloudinary 
+   fs.unlinkSync(req.files[0].path);
+
 res.json(asw);
-
-})
-exports.getAllUser = asyncError(async(req,res,next)=>{
-    const key = req.params.key;
-    if(key != process.env.KEY)res.status(400).json({
-        status:'failed',
-        message:'you cant have access to open ...!!'
-    });
-  const user = await User.find();
-    res.json({
-        status:"success",
-        user
-    });
-})
-exports.getUser = asyncError(async(req,res,next)=>{
-    const key = req.params.key;
-    if(key != process.env.KEY)res.status(400).json({
-        status:'failed',
-        message:'you cant have access to open ...!!'
-    });
-  const user = await User.findById(req.params.id);
-  if(!user)return res.status(404).json({ 
-      status:'failed',
-      message:'invalid id number..'}) 
-
-  res.json({
-        status:"success",
-        user
-    });
 
 })
 // creat user 
@@ -66,7 +61,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).json({
            status:"fail",
-            message :'That user already exist!'});
+            message :'That user already signin!'});
     
         user = new User(req.body);
         user.confirmPassword=undefined ;
@@ -117,8 +112,6 @@ exports.loginUser =asyncError( async (req, res, next) => {
 });
 
 exports.forgetPassword =asyncError( async(req,res)=>{
-    
-
     let user =await User.findOne({email:req.body.email});
     if(!user)res.status(404).json({
         status :'failed',
@@ -150,7 +143,7 @@ exports.forgetPassword =asyncError( async(req,res)=>{
         user.passwordRestToken =undefined;
         user.passwordRestExpires=undefined;
 
-        return res.status(500).json('there was an error jsoning the email , try again later !!')
+        return res.status(500).json('there was an error sending the email , try again later !!')
     }
 
 })
@@ -183,8 +176,8 @@ exports.restPassword=async(req,res)=>{
         status:'success',
         token
     })
-
         }
+
 //filter : get location by within and get all location with your distance :
 exports.getLocation = asyncError(async(req,res,next)=>{
     const {distance,latlng,unit}=req.params;

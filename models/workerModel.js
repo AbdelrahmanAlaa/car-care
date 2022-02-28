@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema({
    location:{
     type:{
-        type:String,
+        type:String,    
         default:'point'
     },
     coordinates:{

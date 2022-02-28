@@ -1,11 +1,15 @@
+const dotenv = require('dotenv')
+dotenv.config({
+  path: `${__dirname}/config/config.env`,
+})
 
 const cloudinary = require('cloudinary');
 
 
   cloudinary.config({
-    cloud_name:process.env.CLOUD_NAME,
-    api_key:process.env.API_KEY,
-    api_secret:process.env.API_SECRET
+    cloud_name:'car-care3',
+    api_key:'921132538581667',
+    api_secret:'nTeBdjKJiv8tAQBeePnri_VCGx8'
 });
 
    exports.uploads = (file)=>{
