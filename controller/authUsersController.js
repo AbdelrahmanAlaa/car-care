@@ -155,7 +155,8 @@ exports.restPassword=async(req,res)=>{
         status:'failed',
         message:error.details[0].message
     })
-    const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
+    const hashedToken=crypto.createHash('sha256').update({token:req.body.token}).digest('hex');
+    
     const user = await User.findOne({
          passwordRestToken:hashedToken,
          passwordRestExpires:{$gt:Date.now()}
