@@ -150,11 +150,11 @@ exports.forgetPassword =asyncError( async(req,res)=>{
 
 exports.restPassword=async(req,res)=>{
     
-    const {error}=validateRestPassword(req.body)
-    if(error)return res.status(404).json({
-        status:'failed',
-        message:error.details[0].message
-    })
+//     const {error}=validateRestPassword(req.body)
+//     if(error)return res.status(404).json({
+//         status:'failed',
+//         message:error.details[0].message
+//     })
     const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
     
     const user = await User.findOne({
