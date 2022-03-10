@@ -6,8 +6,8 @@ exports.creatLocation = async(req,res)=>{
     const user = await User.findById(req.params.id)
     const{error} = validateLocation(req.body);
     if (error) return res.status(400).json({
-        message :"fail",
-        error :error.details[0].message});
+        error :"fail",
+        message :error.details[0].message});
 
     let location = new Location({
         location:req.body.location,

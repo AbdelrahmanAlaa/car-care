@@ -8,7 +8,7 @@ const mailjet = require ('node-mailjet')
     {
       "From": {
         "Email": "bidoala73@gmail.com",
-        "Name": "app"
+        "Name": "CarCare"
       },
       "To": [
         {
@@ -25,19 +25,16 @@ const mailjet = require ('node-mailjet')
 request
   .then((result) => {
      
-    console.log(result.body)
+    // console.log(result.body)
   })
   .catch((err) => {
-    console.log(err.statusCode)
+    // console.log(err.statusCode)
   })
 }
   module.exports=sendEmail;
 
 
 //  const sendEmail= async options=>{
-   
-
-
 //   var transport = nodemailer.createTransport({
 //    host: process.env.EMAIL_HOST,
 //     port: process.env.EMAIL_PORT,

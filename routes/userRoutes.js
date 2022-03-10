@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/uploadImg', multerConfig, authUsers.uploadImg)
 
-  
+
 router
 .route('/updatePassword')
 .patch(authUsers.auth, userController.updatePassword);

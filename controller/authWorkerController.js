@@ -7,24 +7,22 @@ const _ = require('lodash');
 const { Worker, validateLogin , validateWorker,creatRandomPassword,validateRestPassword } = require('./../models/workerModel');
 const asyncError=require('./../middleware/asyncMiddleware')
 
-const signToken = id => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN
-    });
-  };
+
+exports.auth = async(req,res,next)=>{
+    const token = req.header('x-auth-token');
+    if(!token)return res.status(401).send('access denied . no token provided  ')
   
-exports.getWorker = asyncError(async(req,res)=>{
-    const key = req.params.key;
-    if(key != process.env.KEY)res.status(400).send({
-        status:'failed',
-        message:'you cant have access to open ...!!'
-    });
-    const worker = await Worker.find()
-    res.send({
-        message:"success" ,
-        worker
-    })
-})
+    try{ 
+    const decoded = await jwt.verify(token , config.get('jwtPrivateKey'));
+    req.worker= decoded ;
+    // console.log(decoded)
+    next();
+   }
+   catch(ex){
+       res.status(400).send('invalid token ');
+   }
+}
+
 
 // add a new Worker
 exports.creatWorker = asyncError(async (req, res) => {

@@ -1,14 +1,13 @@
 const { limiter } = require('./middleware/limiter');
-const Joi = require('joi');
 const config = require('config');
-Joi.objectId = require('joi-objectid')(Joi);
 const dotenv = require('dotenv')
 const mongoose = require('mongoose');;
+const cors = require('cors');
 
-
+const carWash = require('./routes/carWashRoutes');
 const users = require('./routes/userRoutes');
 const workers = require('./routes/workerRoutes');
-const cors = require('cors');
+
 dotenv.config({
   path: `${__dirname}/config/config.env`,
 })
@@ -19,13 +18,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.static('img'))
-<<<<<<< HEAD
-=======
-
->>>>>>> 67a5873a6c89c9a225f0bc3ae85b53f0104bbdeb
 app.use('/api',limiter)
 app.use('/api/users', users);
 app.use('/api/worker', workers);
+app.use('/api/carWash', carWash);
 // app.use('/api/forgetPassword', forgetPassword);
 
 

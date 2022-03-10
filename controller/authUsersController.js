@@ -61,7 +61,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).json({
            status:"fail",
-            message :'That user already signin!'});
+            message :'That user already regester!'});
     
         user = new User(req.body);
         user.confirmPassword=undefined ;
@@ -123,15 +123,15 @@ exports.forgetPassword =asyncError( async(req,res)=>{
     // res.json(passwordRestToken)
     await user.save();
 
-    const restURL = `${req.protocol}://${req.get('host')}/api/v1/users/restPassword/${restToken}`;
+    const restURL = `${restToken}`;
 
     const status = `Forgot Your password ? Submit a PATCH request with  your new password and 
-    passwordConfirm to :${restURL}. \n If you didn't forget your password , please ignore this email! `;
+    passwordConfirm to : <br>  your code : ${restURL} .<>  If you didn't forget your password , \n please ignore this email! `;
     
     try{
     await sendEmail({
         email:user.email,
-        subject :'your password reset token (valid for 10 min)',
+        subject :`your password reset if you didn't forget your password please ignore this email`,
         status
     });
     res.status(200).json({

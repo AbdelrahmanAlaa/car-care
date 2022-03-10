@@ -11,7 +11,8 @@ const schema = new mongoose.Schema({
     } ,
        url:{
            type:String,
-           default:'default.png'
+        //    this is url of the default image in cloudinary
+           default:"http://res.cloudinary.com/car-care3/image/upload/v1646093566/on7egnootyrtzxhzrcq3.png"
         } ,
     name: {
         type: String,
@@ -46,7 +47,7 @@ exports.validateUser = (user)=>{
         password: Joi.string().min(8).max(255).required(),
         confirmPassword: Joi.string().min(8).max(255).required().valid(user.password),
         phone:Joi.string().required(),
-        job:Joi.string().min(2).max(255).required()
+        job:Joi.string().min(2).max(255)
     });
     return Joi.validate(user, schema);
 }
@@ -56,7 +57,7 @@ exports.validateUser = (user)=>{
 
 
 exports.creatRandomPassword = function(){
-    const restToken = crypto.randomBytes(32).toString('hex');
+    const restToken = crypto.randomBytes(3).toString('hex');
     
     passwordRestToken = crypto
     .createHash('sha256')

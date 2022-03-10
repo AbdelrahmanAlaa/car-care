@@ -83,4 +83,14 @@ exports.creatRandomPassword = function(){
     return restToken ;
 }
 
+
+
+exports.validateUpdate = (worker)=> {
+    const schema = {
+        name: Joi.string().min(5).max(50),
+        phone:Joi.string()
+        };
+
+    return Joi.validate(worker, schema);
+}
 exports.Worker = Worker;
