@@ -112,10 +112,10 @@ exports.loginUser =asyncError( async (req, res, next) => {
 });
 
 exports.forgetPassword =asyncError( async(req,res)=>{
-    let user =await User.findOne({email:req.email});
+    let user =await User.findOne({email:req.body.email});
     if(!user)res.status(404).json({
         status :'failed',
-        message : 'this email is found ..!'
+        message : 'this email is not found ..!'
  });
     const restToken =creatRandomPassword();
     user.passwordRestToken =passwordRestToken
