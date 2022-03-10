@@ -53,7 +53,7 @@ router
 .post(authUsers.forgetPassword);
 
 router
-.route('/restPassword')
+.route('/restPassword/:token')
 .patch(authUsers.restPassword);
 
 router
