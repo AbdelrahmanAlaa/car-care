@@ -91,13 +91,13 @@ exports.loginUser =asyncError( async (req, res, next) => {
     let user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(400).json({
         status:"failed",
-        message:'Incorrect email or password.'
+        message:'Incorrect email.'
     });
         //compare password with coming in req and database : 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword)return res.status(400).json({
         status:"failed",
-        message:'Incorrect email or password.'});
+        message:'Incorrect password.'});
 
         const token = jwt.sign({_id : user._id} , config.get('jwtPrivateKey')); 
         
@@ -148,35 +148,35 @@ exports.forgetPassword =asyncError( async(req,res)=>{
 
 })
 
-exports.restPassword=async(req,res)=>{
+exports.restPassword=asyncError(async(req,res)=>{
     
+    const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
+    
+    const user = await User.findOne({
+         passwordRestToken:hashedToken,
+         passwordRestExpires:{$gt:Date.now()}
+         });
+         if(!user)return res.status(400).json('Token is invalid or expired ..')
+      
     const {error}=validateRestPassword(req.body)
     if(error)return res.status(404).json({
         status:'failed',
         message:error.details[0].message
     })
-    const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
-    const user = await User.findOne({
-         passwordRestToken:hashedToken,
-         passwordRestExpires:{$gt:Date.now()}
-         });
-         
-            if(!user)return res.status(400).json('Token is invalid or expired ..')
-            
-         const salt = await bcrypt.genSalt(10);
-         user.password = await bcrypt.hash(user.password, salt);
         
+         const salt = await bcrypt.genSalt(10);
+         user.password = await bcrypt.hash(req.body.password, salt);
+         
          user.confirmPassword=undefined;
         user.passwordRestToken =undefined;
         user.passwordExpires =undefined;
 
         await user.save();
-        const token = jwt.sign({_id : user._id} , config.get('jwtPrivateKey')); 
-    res.status(200).json({
+        res.status(200).json({
         status:'success',
-        token
+        user
     })
-        }
+        })
 
 //filter : get location by within and get all location with your distance :
 exports.getLocation = asyncError(async(req,res,next)=>{
