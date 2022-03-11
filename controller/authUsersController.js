@@ -163,11 +163,6 @@ exports.restPassword=asyncError(async(req,res)=>{
         status:'failed',
         message:error.details[0].message
     })
-         
-            
-         const salt = await bcrypt.genSalt(10);
-         user.password = await bcrypt.hash(user.password, salt);
-
         
          const salt = await bcrypt.genSalt(10);
          user.password = await bcrypt.hash(req.body.password, salt);
