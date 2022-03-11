@@ -150,6 +150,10 @@ exports.forgetPassword =asyncError( async(req,res)=>{
 
 exports.restPassword=asyncError(async(req,res)=>{
     
+<<<<<<< HEAD
+=======
+
+>>>>>>> 85050d907ffe023c8fe0b0cbbe3dec348590b9f3
     const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
     
     const user = await User.findOne({
@@ -163,6 +167,13 @@ exports.restPassword=asyncError(async(req,res)=>{
         status:'failed',
         message:error.details[0].message
     })
+<<<<<<< HEAD
+=======
+         
+            
+         const salt = await bcrypt.genSalt(10);
+         user.password = await bcrypt.hash(user.password, salt);
+>>>>>>> 85050d907ffe023c8fe0b0cbbe3dec348590b9f3
         
          const salt = await bcrypt.genSalt(10);
          user.password = await bcrypt.hash(req.body.password, salt);
