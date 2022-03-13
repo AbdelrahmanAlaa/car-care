@@ -58,6 +58,7 @@ exports.creatWorker = asyncError(async (req, res) => {
 
         res.send({
             status:'success',
+            message: "Request was a success",
             token,
             Worker:_.pick(worker, ['_id', 'name', 'email'])
         });
@@ -88,6 +89,7 @@ exports.loginWorker = asyncError( async (req, res) => {
         
         res.send({
         status:"success",
+        message: "Request was a success",
         token,
         Worker:_.pick(worker,['_id','name','email',''])
     });
@@ -121,6 +123,7 @@ await sendEmail({
 });
 res.status(200).send({
     status:'success',
+    message: "Request was a success",
     message:'token sent to email'
 })}
 
@@ -160,6 +163,7 @@ exports.restPassword = asyncError(async(req,res)=>{
     const token = jwt.sign({_id : worker._id} , config.get('jwtPrivateKey')); 
     res.status(200).send({
     status:'success',
+    message: "Request was a success",
     token
 })
 

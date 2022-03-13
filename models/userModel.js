@@ -11,13 +11,8 @@ const schema = new mongoose.Schema({
     } ,
        url:{
            type:String,
-<<<<<<< HEAD
-
         //    this is url of the default image in cloudinary
            default:"http://res.cloudinary.com/car-care3/image/upload/v1646093566/on7egnootyrtzxhzrcq3.png"
-=======
-           default:"http://res.cloudinary.com/car-care3/image/upload/v1646093566/on7egnootyrtzxhzrcq3.png"          
->>>>>>> 85050d907ffe023c8fe0b0cbbe3dec348590b9f3
         } ,
     name: {
         type: String,

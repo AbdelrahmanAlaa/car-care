@@ -14,6 +14,7 @@ exports.getAllWorker = asyncError(async(req,res,next)=>{
   const worker = await Worker.find();
     res.json({
         status:"success",
+        message: "Request was a success",
         worker
     });
 
@@ -32,6 +33,7 @@ exports.getWorker = asyncError(async(req,res,next)=>{
 
   res.json({
         status:"success",
+        message: "Request was a success",
         worker
     });
 
@@ -57,6 +59,7 @@ exports.updatePassword=asyncError(async(req,res)=>{
     await worker.save();
     res.status(200).json({
         status:'success',
+        message: "Request was a success",
         worker
     })
 
@@ -78,6 +81,7 @@ exports.updateMyPhoto=asyncError(async(req,res)=>{
 
         res.status(200).json({
             status:'success',
+            message: "Request was a success",
             worker
         })
 })
@@ -95,6 +99,7 @@ exports.updateMe=asyncError(async(req,res)=>{
         
         res.status(200).json({
             status:'success',
+            message: "Request was a success",
             worker
         })
 })
@@ -103,6 +108,7 @@ exports.deleteMe = asyncError(async(req,res)=>{
     await Worker.findByIdAndRemove(req.worker._id , {active:false});
        res.status(200).json({
            status:'success',
+           message: "Request was a success",
            data:null
        })
    })

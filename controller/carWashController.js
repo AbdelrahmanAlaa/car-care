@@ -28,6 +28,7 @@ exports.creatCarWash = asyncError(async(req,res)=>{
         });
         res.status(200).json({
             status:'success',
+            message: "Request was a success",
             carWash           
         })
         await carWash.save();
@@ -37,6 +38,7 @@ exports.creatCarWash = asyncError(async(req,res)=>{
         const user = await User.findById(req.user._id);
         res.json({
             status:'success',
+            message: "Request was a success",
             message:_.pick(user,['name','email','phone'])
         })
     })
@@ -45,6 +47,7 @@ exports.creatCarWash = asyncError(async(req,res)=>{
         const carWash =await CarWash.findOne({userId:req.user._id});
         res.json({
             status:'success',
+            message: "Request was a success",
             carWash:_.pick(carWash, ['carMake', 'color', 'carModel','location'])
         })
     })
@@ -59,6 +62,7 @@ exports.creatCarWash = asyncError(async(req,res)=>{
 
          res.json({
              status:'success',
+             message: "Request was a success",
              carWash
          })
     })

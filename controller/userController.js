@@ -14,6 +14,7 @@ exports.getAllUser = asyncError(async(req,res,next)=>{
   const user = await User.find();
     res.json({
         status:"success",
+        message: "Request was a success",
         user
     });
 
@@ -32,6 +33,7 @@ exports.getUser = asyncError(async(req,res,next)=>{
 
   res.json({
         status:"success",
+        message: "Request was a success",
         user
     });
 
@@ -57,6 +59,7 @@ exports.updatePassword=asyncError(async(req,res)=>{
     await user.save();
     res.status(200).json({
         status:'success',
+        message: "Request was a success",
         user
     })
 
@@ -78,6 +81,7 @@ exports.updateMyPhoto=asyncError(async(req,res)=>{
 
         res.status(200).json({
             status:'success',
+            message: "Request was a success",
             user
         })
 })
@@ -95,6 +99,7 @@ exports.updateMe=asyncError(async(req,res)=>{
         
         res.status(200).json({
             status:'success',
+            message: "Request was a success",
             user
         })
 })
@@ -103,6 +108,7 @@ exports.deleteMe = asyncError(async(req,res)=>{
     await User.findByIdAndRemove(req.user._id , {active:false});
        res.status(200).json({
            status:'success',
+           message: "Request was a success",
            data:null
        })
    })

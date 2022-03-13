@@ -60,10 +60,9 @@ exports.creatUser = asyncError(async (req, res,next) => {
     // Check if this user already exist
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).json({
-           status:"fail",
+           status:"failed",
             message :'That user already regester!'});
-    
-        user = new User(req.body);
+     user = new User(req.body);
         user.confirmPassword=undefined ;
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
@@ -72,6 +71,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
         res.header('x-auth-token',token)
         .status(200).json({
             status:"success",
+            message: "Request was a success",
             user:_.pick(user, ['_id', 'name', 'email']),
             token
         });
@@ -106,6 +106,7 @@ exports.loginUser =asyncError( async (req, res, next) => {
         res.header('x-auth-token',token)
         .status(200).json({
             status:"success", 
+            message: "Request was a success",
             token,
             user:_.pick(user, ['_id', 'name', 'email'])         
         });
@@ -136,6 +137,7 @@ exports.forgetPassword =asyncError( async(req,res)=>{
     });
     res.status(200).json({
         status:'success',
+        message: "Request was a success",
         message:'token sent to email'
     })}
 
@@ -150,11 +152,7 @@ exports.forgetPassword =asyncError( async(req,res)=>{
 
 exports.restPassword=asyncError(async(req,res)=>{
     
-<<<<<<< HEAD
-=======
-
->>>>>>> 85050d907ffe023c8fe0b0cbbe3dec348590b9f3
-    const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
+  const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
     
     const user = await User.findOne({
          passwordRestToken:hashedToken,
@@ -167,17 +165,9 @@ exports.restPassword=asyncError(async(req,res)=>{
         status:'failed',
         message:error.details[0].message
     })
-<<<<<<< HEAD
-=======
-         
-            
-         const salt = await bcrypt.genSalt(10);
-         user.password = await bcrypt.hash(user.password, salt);
->>>>>>> 85050d907ffe023c8fe0b0cbbe3dec348590b9f3
-        
-         const salt = await bcrypt.genSalt(10);
-         user.password = await bcrypt.hash(req.body.password, salt);
-         
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+    
          user.confirmPassword=undefined;
         user.passwordRestToken =undefined;
         user.passwordExpires =undefined;
@@ -185,6 +175,7 @@ exports.restPassword=asyncError(async(req,res)=>{
         await user.save();
         res.status(200).json({
         status:'success',
+        message: "Request was a success",
         user
     })
         })
@@ -201,6 +192,7 @@ exports.getLocation = asyncError(async(req,res,next)=>{
 
     res.status(200).json({
         "status":"success",
+        message: "Request was a success",
         "result":worker.length,
         data:worker
     });
@@ -224,7 +216,7 @@ exports.getDistance=asyncError(async(req,res)=>{
             $geoNear:{
                 near:{
                     type:'point',
-                    cordinates:[lng * 1,lat * 1]
+                    coordinates:[lng * 1,lat * 1]
                 },
                 distanceField: 'distance'
             } 
@@ -233,6 +225,7 @@ exports.getDistance=asyncError(async(req,res)=>{
     
     res.status(200).json({
         'status':'success',
+        message: "Request was a success",
         data:distance
     });
     
