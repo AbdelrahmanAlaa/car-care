@@ -58,7 +58,7 @@ exports.creatWorker = asyncError(async (req, res) => {
 
         res.send({
             status:'success',
-            message: "Request was a success",
+            message: "successfully register",
             token,
             Worker:_.pick(worker, ['_id', 'name', 'email'])
         });
@@ -89,7 +89,7 @@ exports.loginWorker = asyncError( async (req, res) => {
         
         res.send({
         status:"success",
-        message: "Request was a success",
+        message: "successfully login",
         token,
         Worker:_.pick(worker,['_id','name','email',''])
     });

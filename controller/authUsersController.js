@@ -61,7 +61,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).json({
            status:"failed",
-            message :'That user already regester!'});
+            message :'That user already register!'});
      user = new User(req.body);
         user.confirmPassword=undefined ;
         const salt = await bcrypt.genSalt(10);
@@ -71,7 +71,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
         res.header('x-auth-token',token)
         .status(200).json({
             status:"success",
-            message: "Request was a success",
+            message: "successfully register",
             user:_.pick(user, ['_id', 'name', 'email']),
             token
         });
@@ -106,7 +106,7 @@ exports.loginUser =asyncError( async (req, res, next) => {
         res.header('x-auth-token',token)
         .status(200).json({
             status:"success", 
-            message: "Request was a success",
+            message: "successfully login",
             token,
             user:_.pick(user, ['_id', 'name', 'email'])         
         });
