@@ -151,9 +151,9 @@ exports.forgetPassword =asyncError( async(req,res)=>{
 })
 
 exports.restPassword=asyncError(async(req,res)=>{
-    
+
   const hashedToken=crypto.createHash('sha256').update(req.params.token).digest('hex');
-    
+
     const user = await User.findOne({
          passwordRestToken:hashedToken,
          passwordRestExpires:{$gt:Date.now()}
@@ -165,9 +165,11 @@ exports.restPassword=asyncError(async(req,res)=>{
         status:'failed',
         message:error.details[0].message
     })
+
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(req.body.password, salt);
     
+
          user.confirmPassword=undefined;
         user.passwordRestToken =undefined;
         user.passwordExpires =undefined;
