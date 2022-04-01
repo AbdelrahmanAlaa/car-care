@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 //defining user schema 
 const schema = new mongoose.Schema({
-   location:{
+    location:{
     type:{
         type:String,    
         default:'point'
@@ -33,11 +33,22 @@ const schema = new mongoose.Schema({
     IDNumber:{
         type:Number
     },
+    ratingAverage:{
+        type:Number
+    },
+    ratingQuantity:{
+        type:Number
+    },
+    specialized:{
+        type:String,
+        
+        default:false
+    },
     passwordRestToken:String,
     passwordRestExpires:Date
 })
-// schema.index({location:"2dsphere"});
-// schema.index({name:1})
+
+
 
 const Worker = mongoose.model('Worker', schema);
 
@@ -48,9 +59,10 @@ exports.validateWorker =(Worker) =>{
         email: Joi.string().min(5).max(255).required().email(),
         password: Joi.string().min(8).max(255).required(),
         confirmPassword: Joi.string().min(8).max(255).required().valid(Worker.password),
-        phone:Joi.string().required(),
-        IDNumber:Joi.string().required(),
-        location:Joi.required()
+        phone:Joi.string().min(11).max(14).required(),
+        IDNumber:Joi.string().min(16).max(16).required(),
+        location:Joi.required(),
+        specialized:Joi.string().min(3).max(50).required().valid('motor','electronic','anather')
     });
     return Joi.validate(Worker, schema);
 }

@@ -2,8 +2,17 @@ const express = require('express');
 const authUsers = require('../controller/authUsersController');
 const multerConfig = require('../middleware/multer');
 const userController = require('../controller/userController');
+const review=require('../controller/reviewController');
 const router = express.Router();
 
+
+// routes of review controller
+router
+.route('/review')
+.post(authUsers.auth,review.creatReview) 
+
+
+// routes of uploadImg 
 router.post('/uploadImg', multerConfig, authUsers.uploadImg)
 
 

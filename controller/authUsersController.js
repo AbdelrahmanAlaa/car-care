@@ -54,7 +54,7 @@ exports.creatUser = asyncError(async (req, res,next) => {
     // First Validate The Request
     const { error } = validateUser(req.body);
     if (error) return res.status(400).json({
-        status :"fail",
+        status :"failed",
         message :error.details[0].message});
     
     // Check if this user already exist
@@ -91,13 +91,13 @@ exports.loginUser =asyncError( async (req, res, next) => {
     let user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(400).json({
         status:"failed",
-        message:'Incorrect email.'
+        message:'check you email or password...'
     });
         //compare password with coming in req and database : 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword)return res.status(400).json({
         status:"failed",
-        message:'Incorrect password.'});
+        message:'check you email or password...'});
 
         const token = jwt.sign({_id : user._id} , config.get('jwtPrivateKey')); 
         
@@ -138,7 +138,7 @@ exports.forgetPassword =asyncError( async(req,res)=>{
     res.status(200).json({
         status:'success',
         message: "Request was a success",
-        message:'token sent to email'
+        message:'validation message sent to your  email'
     })}
 
     catch(err){

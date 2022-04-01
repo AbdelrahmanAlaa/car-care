@@ -59,7 +59,7 @@ exports.updatePassword=asyncError(async(req,res)=>{
     await worker.save();
     res.status(200).json({
         status:'success',
-        message: "Request was a success",
+        message: "successfully updated",
         worker
     })
 
@@ -81,7 +81,7 @@ exports.updateMyPhoto=asyncError(async(req,res)=>{
 
         res.status(200).json({
             status:'success',
-            message: "Request was a success",
+            message: "successfully updated ",
             worker
         })
 })
@@ -99,7 +99,7 @@ exports.updateMe=asyncError(async(req,res)=>{
         
         res.status(200).json({
             status:'success',
-            message: "Request was a success",
+            message: "successfully updated",
             worker
         })
 })
@@ -108,7 +108,7 @@ exports.deleteMe = asyncError(async(req,res)=>{
     await Worker.findByIdAndRemove(req.worker._id , {active:false});
        res.status(200).json({
            status:'success',
-           message: "Request was a success",
+           message: "successfully deleted",
            data:null
        })
    })

@@ -10,10 +10,10 @@ const workerController = require('../controller/workerController');
 
 router 
 .route('/:key/getWorker')
-.get(workerController.getWorker)
+.get(workerController.getAllWorker)
 
 router 
-.route('/:key/getWorker')
+.route('/:key/getWorkerById/:id')
 .get(workerController.getWorker)
 
 router

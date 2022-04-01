@@ -110,7 +110,7 @@ worker.passwordRestExpires=passwordRestExpires;
 //  res.send(passwordRestExpires);
 await worker.save();
 
-const restURL = `${req.protocol}://${req.get('host')}/api/v1/users/restPassword/${restToken}`;
+const resltURL = `${req.protocol}://${req.get('host')}/api/v1/users/restPassword/${restToken}`;
 
 const message = `Forgot Your password ? Submit a PATCH request with  your new password and 
 passwordConfirm to :${restURL}. \n If you didn't forget your password , please ignore this email! `;
