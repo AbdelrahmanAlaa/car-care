@@ -112,3 +112,18 @@ exports.deleteMe = asyncError(async(req,res)=>{
            data:null
        })
    })
+
+
+
+   exports.getSpecialized =asyncError( async(req,res)=>{
+   
+        const worker = await Worker.find({specialized:req.params.specialized})
+          .select(' url name phone ratingQuantity ratingAverage  -_id')
+       
+        res.status(200).json({
+        status:'success',
+        length:worker.length,
+            worker
+        })
+   })
+   

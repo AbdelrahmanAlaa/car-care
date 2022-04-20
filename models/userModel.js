@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const validator=require('validator')
+
 //defining user schema 
 const schema = new mongoose.Schema({
    

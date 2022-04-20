@@ -18,10 +18,7 @@ const schema = new mongoose.Schema({
     }
 });
 
-schema.statics.calcAverageRatings = async function(worker){
-    console.log(worker)
-}
-
+ 
 
 const Review = mongoose.model('Review',schema);
 

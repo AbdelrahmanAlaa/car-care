@@ -39,6 +39,12 @@ router
 .delete(authWorker.auth,workerController.deleteMe);
 
 
+router 
+.route('/getSpecialized/:specialized')
+.get(authWorker.auth,workerController.getSpecialized);
+
+
+
   // route of auth worker  
 
 router
@@ -55,5 +61,7 @@ router
   router
   .route('/restPasswordWorker/:token')
   .patch(authWorker.restPassword); 
+
+
 
   module.exports = router;

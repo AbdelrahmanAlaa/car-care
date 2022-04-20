@@ -43,8 +43,7 @@ exports.creatWorker = asyncError(async (req, res) => {
             email:req.body.email,
             password:req.body.password,
             confirmPassword:req.body.confirmPassword,
-            phone:req.body.phone,
-            IDNumber:req.body.IDNumber, 
+            phone:req.body.phone, 
             location:req.body.location,
               
         });

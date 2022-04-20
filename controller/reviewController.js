@@ -1,6 +1,6 @@
 const {Review,validateReview}  = require('./../models/reviewModel')
 const asyncError = require('./../middleware/asyncMiddleware');
-
+const {Worker} = require('./../models/workerModel')
 
 exports.getReview =asyncError(async(req,res)=>{
     const review =await Review.find();
@@ -26,16 +26,21 @@ exports.creatReview= asyncError(async(req,res)=>{
     
    const stats =  await Review.aggregate([
         {
-            $match:{workerId}
+            $match:{worker:review.worker}
+        },
+        {
+         $group: {
+        _id:'$worker',
+         nRating:{$sum:1},
+         avgRating:{$avg : '$rating'}
         }
-        // {
-        //  $group:'$worker',
-        //  nRating:{$sum:1},
-        //  avgRating:{$avg : '$rating'}
-        // }
-
+    }
     ]);
-    console.log(stats)
+
+const worker = await Worker.findByIdAndUpdate(req.body.worker,{
+    ratingQuantity:stats[0].nRating,
+    ratingAverage:stats[0].avgRating
+},{new:true});
 
 
 

@@ -17,7 +17,7 @@ const fs = require('fs');
 
 exports.auth = async(req,res,next)=>{
     const token = req.header('x-auth-token');
-    if(!token)return res.status(401).send('access denied . no token provided  ')
+    if(!token)return res.status(401).json({message:'access denied . no token provided  '})
   
     try{ 
     const decoded = await jwt.verify(token , config.get('jwtPrivateKey'));
@@ -26,7 +26,7 @@ exports.auth = async(req,res,next)=>{
     next();
    }
    catch(ex){
-       res.status(400).send('invalid token ');
+       res.status(400).json({message:'invalid token '});
    }
 }
 
@@ -176,8 +176,8 @@ exports.restPassword=asyncError(async(req,res)=>{
 
         await user.save();
         res.status(200).json({
-        status:'success',
-        message: "Request was a success",
+        status:'successfully rest Password',
+        message: "success",
         user
     })
         })
