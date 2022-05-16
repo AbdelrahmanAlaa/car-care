@@ -1,21 +1,34 @@
-const multer = require('multer');
-
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
 
 const fileStorage = multer.diskStorage({
-    destination:'images',
-    filename:(req,file,cb)=>{
-        cb(null,file.originalname)
-    }
-})
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+});
 
-const fileFilter = (req,file,cb)=>{
-    if(file.mimetype === 'image/png' ||
-    file.mimetype === 'image/jpg' ||
-    file.mimetype === 'image/jpeg'  )
-    {
-        cb(null,true)
-    }else{
-        cb(null,false)
-    }
-}
-module.exports = multer({storage:fileStorage,fileFilter:fileFilter}).any()
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+exports.uploadSingleImage = multer({
+  storage: fileStorage,
+  fileFilter: fileFilter,
+}).single("photo");
+
+exports.uploadMultiImage = multer({
+  storage: fileStorage,
+  fileFilter: fileFilter,
+}).fields([
+  {
+    name: "carPhoto",
+    maxCount: "4",
+  },
+  {
+    name: "licensePhoto",
+    maxCount: "2",
+  },
+]);

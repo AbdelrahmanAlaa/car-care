@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authWorker = require("../controller/authWorkerController");
-const multerConfig = require("../middleware/multer");
+// const uploadImage = require("../middleware/multer");
 const workerController = require("../controller/workerController");
 
 //  route of worker controller
@@ -16,9 +16,9 @@ router
 
 router.route("/updateMe").patch(authWorker.auth, workerController.updateMe);
 
-router
-  .route("/updateMyPhoto")
-  .patch(authWorker.auth, multerConfig, workerController.updateMyPhoto);
+// router
+//   .route("/updateMyPhoto")
+//   .patch(authWorker.auth, uploadImage, workerController.updateMyPhoto);
 
 router.route("/deleteMe").delete(authWorker.auth, workerController.deleteMe);
 

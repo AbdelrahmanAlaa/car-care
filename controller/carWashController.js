@@ -38,6 +38,7 @@ exports.creatCarWash = asyncError(async (req, res) => {
     city: req.body.city,
     country: req.body.country,
     price: req.body.price,
+    pricing: req.body.pricing,
     title: req.body.title,
     option: req.body.option,
   });

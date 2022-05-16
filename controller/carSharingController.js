@@ -1,9 +1,24 @@
 const { CarSharing, validateCarSharing } = require("../models/carSharingModel");
 const asyncError = require("../middleware/asyncMiddleware");
-
+const upload = require("../middleware/cloudinary");
 const _ = require("lodash");
 
 exports.creatCarSharing = asyncError(async (req, res) => {
+  // const fileName = `carSharing-${req.user._id}-${Date.now()}`;
+
+  if (req.files.licensePhoto) {
+    req.body.licensePhoto = [];
+    await Promise.all(
+      req.files.licensePhoto.map(async (img) => {
+        const result = await upload.uploads(img.path);
+        // console.log(result);
+        req.body.licensePhoto.push(result);
+      })
+    );
+  }
+  // console.log(req.body.licensePhoto);
+
+  // console.log(result);
   const { error } = validateCarSharing(req.body);
   if (error)
     return res.status(404).json({
@@ -11,10 +26,20 @@ exports.creatCarSharing = asyncError(async (req, res) => {
       message: error.details[0].message,
     });
 
+  console.log(req.body.licensePhoto);
   const carSharing = await CarSharing.create(req.body);
+
+  //   time:req.body.time,
+  // date:req.body.date,
+  // price:req.body.price,
+  // description:req.body.description,
+  // number:req.body.number,
+  // licensePhoto:req.body.licensePhoto,
+  // carPhoto:req.body.carPhoto,
 
   res.send(carSharing);
 });
+
 // check if user register before or not
 
 //   const user = await User.findById(req.user._id);

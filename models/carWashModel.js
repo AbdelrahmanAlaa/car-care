@@ -16,7 +16,7 @@ const schema = new mongoose.Schema(
       coordinates: [Number],
     },
     streetAddress: { type: String },
-    City: { type: String },
+    city: { type: String },
     country: { type: String },
     carMake: { type: String },
     carModel: { type: Number },
@@ -43,6 +43,7 @@ exports.validateCarWash = (req) => {
     city: Joi.string().min(3).max(100),
     country: Joi.string().min(3).max(100),
     price: Joi.number().required(),
+    pricing: Joi.number().required(),
     title: Joi.string().required(),
     option: Joi.array().required(),
   });
@@ -60,6 +61,7 @@ exports.validateUpdateCarWash = (req) => {
     city: Joi.string().min(3).max(100),
     country: Joi.string().min(3).max(100),
     price: Joi.number().required(),
+    pricing: Joi.number().required(),
     title: Joi.string().required(),
     option: Joi.array().required(),
   });

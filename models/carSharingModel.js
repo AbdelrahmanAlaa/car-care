@@ -2,28 +2,35 @@ const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 const schema = new mongoose.Schema(
   {
-    to: { to: { type: String }, city: { type: String } },
     from: { from: { type: String }, city: { type: String } },
+    to: { to: { type: String }, city: { type: String } },
     date: { type: Date },
-    time: { type: Date },
+    time: { type: Number },
     number: { type: Number },
     price: { type: Number },
+    description: { type: String },
+    checked: { type: Boolean },
+    licensePhoto: [Array],
+    // carPhoto: [{type:String}],
   },
   { timestamps: true }
 );
 
 schema.index({ name: 1 });
 
-const CarSharing = mongoose.model("carShaing", schema);
+const CarSharing = mongoose.model("carSharing", schema);
 
 exports.validateCarSharing = (req) => {
   const schema = Joi.object({
-    from: Joi.required(),
-    to: Joi.required(),
-    date: Joi.number().required(),
-    time: Joi.string().required(),
-    number: Joi.number().required(),
+    // from: Joi.required(),
+    // to: Joi.required(),
+    date: Joi.date().greater("now").required(),
+    time: Joi.number().required(),
+    number: Joi.number().min(1).max(4).required(),
     price: Joi.number().required(),
+    description: Joi.string().min(2).max(500).required(),
+    licensePhoto: Joi,
+    carPhoto: Joi,
   });
   return Joi.validate(req, schema);
 };

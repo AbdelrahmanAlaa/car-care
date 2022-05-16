@@ -1,14 +1,13 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const carSharing = require('../controller/carSharingController')
-const authUsers = require('../controller/authUsersController');
-
-
+const authUsers = require("../controller/authUsersController");
+const { uploadMultiImage } = require("../middleware/multer");
+const carSharing = require("../controller/carSharingController");
 
 //route of car wash
 router
-.route('/register')
-.post(authUsers.auth,carSharing.creatCarSharing) 
+  .route("/register")
+  .post(authUsers.auth, uploadMultiImage, carSharing.creatCarSharing);
 
 // router
 // .route('/getCarInfo')
@@ -18,9 +17,8 @@ router
 // .route('/getUserInfo')
 // .get(authUsers.auth,carWash.getUserInfo)
 
-
 // router
 // .route('/updateCarInfo')
 // .patch(authUsers.auth,carWash.updateCarWash)
 
-module.exports = router
+module.exports = router;
