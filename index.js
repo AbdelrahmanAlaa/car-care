@@ -29,8 +29,9 @@ app.use("/api/carWash", carWash);
 app.use("/api/carSharingPost", carSharingPost);
 app.use("/api/carSharingInfo", carSharingInfo);
 
+// "mongodb://localhost/graduation-project"
 mongoose
-  .connect("mongodb://localhost/graduation-project", {
+  .connect(process.env.CONNECT_DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
