@@ -62,8 +62,8 @@ exports.validateUpdateCarWash = (req) => {
     country: Joi.string().min(3).max(100),
     price: Joi.number().required(),
     pricing: Joi.number().required(),
-    title: Joi.string().required(),
-    option: Joi.array().required(),
+    title: Joi.string(),
+    option: Joi.array(),
   });
   return Joi.validate(req, schema);
 };

@@ -24,8 +24,8 @@ exports.uploadMultiImage = multer({
   fileFilter: fileFilter,
 }).fields([
   {
-    name: "carPhoto",
-    maxCount: "4",
+    name: "licenseCarPhoto",
+    maxCount: "2",
   },
   {
     name: "licensePhoto",

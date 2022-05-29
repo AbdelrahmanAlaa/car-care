@@ -4,7 +4,8 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
 const { limiter } = require("./middleware/limiter");
-const carSharing = require("./routes/carSharingRoutes");
+const carSharingPost = require("./routes/carSharingRoutesPost");
+const carSharingInfo = require("./routes/carSharingRoutesInfo");
 const carWash = require("./routes/carWashRoutes");
 const users = require("./routes/userRoutes");
 const workers = require("./routes/workerRoutes");
@@ -25,10 +26,11 @@ app.use("/api", limiter);
 app.use("/api/users", users);
 app.use("/api/worker", workers);
 app.use("/api/carWash", carWash);
-app.use("/api/carSharing", carSharing);
+app.use("/api/carSharingPost", carSharingPost);
+app.use("/api/carSharingInfo", carSharingInfo);
 
 mongoose
-  .connect(process.env.CONNECT_DB, {
+  .connect("mongodb://localhost/graduation-project", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

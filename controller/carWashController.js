@@ -1,8 +1,4 @@
-const {
-  CarWash,
-  validateCarWash,
-  validateUpdateCarWash,
-} = require("../models/carWashModel");
+const { CarWash, validateCarWash } = require("../models/carWashModel");
 const asyncError = require("../middleware/asyncMiddleware");
 const { User } = require("../models/userModel");
 const _ = require("lodash");
@@ -17,7 +13,8 @@ exports.creatCarWash = asyncError(async (req, res) => {
 
   // check if user register before or not
 
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id).select("_id");
+  req.body.userId = user;
 
   //   const validate = await CarWash.findOne({ userId: user });
   //   if (validate)
@@ -28,23 +25,10 @@ exports.creatCarWash = asyncError(async (req, res) => {
   //     });
   if (!req.body.email) req.body.email = user.email;
 
-  let carWash = new CarWash({
-    userId: user._id,
-    location: req.body.location,
-    carMake: req.body.carMake,
-    carModel: req.body.carModel,
-    color: req.body.color,
-    streetAddress: req.body.streetAddress,
-    city: req.body.city,
-    country: req.body.country,
-    price: req.body.price,
-    pricing: req.body.pricing,
-    title: req.body.title,
-    option: req.body.option,
-  });
+  let carWash = new CarWash(req.body);
   res.status(200).json({
     status: "success",
-    message: "Request was a success",
+    message: "created was a success",
     carWash,
   });
   await carWash.save();
@@ -68,22 +52,31 @@ exports.getCarInfo = asyncError(async (req, res) => {
   });
 });
 
-exports.updateCarWash = asyncError(async (req, res) => {
-  const { error } = validateUpdateCarWash(req.body);
-  if (error)
-    return res.status(404).json({
-      status: "failed",
-      message: error.details[0].message,
-    });
-  const carWash = await CarWash.findOneAndUpdate(
-    { userId: req.user._id },
-    req.body,
-    { new: true }
-  );
+exports.deleteCarWash = asyncError(async (req, res) => {
+  const carWash = await CarWash.findOneAndDelete({ userId: req.user._id });
 
   res.json({
     status: "success",
-    message: "Request was a success",
+    message: "deleted was a success",
     carWash,
   });
 });
+
+// exports.updateCarWash = asyncError(async (req, res) => {
+//   const { error } = validateUpdateCarWash(req.body);
+//   if (error)
+//     return res.status(404).json({
+//       status: "failed",
+//       message: error.details[0].message,
+//     });
+//   const carWash = await CarWash.findOneAndUpdate(
+//     { userId: req.user._id },
+//     req.body,
+//     { new: true }
+//   );
+//   res.json({
+//     status: "success",
+//     message: "updated was a success",
+//     carWash,
+//   });
+// });
