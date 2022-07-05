@@ -50,12 +50,18 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
     })
   }
   const carSharingInfo = await CarSharingInfo.create(req.body);
-  res.send(carSharingInfo);
+res.status(200).json({
+  status:"success",
+  carSharingInfo
+})
 });
 
 exports.getCarSharingInfo = asyncError(async (req, res) => {
   const carSharingInfo = await CarSharingInfo.find().sort({ date: -1 });
-  res.send(carSharingInfo);
+  res.status(200).json({
+    status:"success",
+    carSharingInfo
+  });
 });
  
 exports.getCarSharingInfoById = asyncError(async (req, res) => {
@@ -64,7 +70,10 @@ exports.getCarSharingInfoById = asyncError(async (req, res) => {
     status:"failed",
     message:"no id founded .. "
   })
-  res.send(carSharingInfo);
+  res.status(200).json({
+    status:"success",
+    carSharingInfo
+  });
 });
 
 exports.deleteCareSharingInfo = asyncError(async(req,res)=>{
@@ -74,8 +83,6 @@ exports.deleteCareSharingInfo = asyncError(async(req,res)=>{
     status:"failed",
     message:"no id founded"
   })
-  console.log(carSharing)
-
   res.status(200).json({
     status:"success",
     message:"successfully deleted"

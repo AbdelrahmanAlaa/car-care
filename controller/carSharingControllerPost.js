@@ -97,21 +97,21 @@ exports.getBooking = asyncError(async(req,res)=>{
   })
 })
 
-exports.acceptBooking = asyncError(async(req,res)=>{
-  console.log(req.params.postBooking)
-const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
+// exports.acceptBooking = asyncError(async(req,res)=>{
+//   console.log(req.params.postBooking)
+// const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
 
-if(booking.carSharingPostId.number >= many  ){
-return result = booking.carSharingPostId.number - many
-console.log(result)
-} 
-else{
-  return res.status(400).json({
-    status:"failed",
-    message:`this user just need ${booking.carSharingPostId.number}  ` 
-  })
-}
+// if(booking.carSharingPostId.number >= many  ){
+// return result = booking.carSharingPostId.number - many
+// console.log(result)
+// } 
+// else{
+//   return res.status(400).json({
+//     status:"failed",
+//     message:`this user just need ${booking.carSharingPostId.number}  ` 
+//   })
+// }
 
-})
+// })
 
  
