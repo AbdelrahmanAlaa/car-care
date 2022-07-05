@@ -20,8 +20,8 @@ router
 .route('/getBooking')
 .get(authUsers.auth,carSharingPost.getBooking)
 
-router
-.route('/acceptedBooking/:postBooking')
-.patch(authUsers.auth,carSharingPost.acceptBooking)
+// router
+// .route('/acceptedBooking/:postBooking')
+// .patch(authUsers.auth,carSharingPost.acceptBooking)
 
 module.exports = router;
