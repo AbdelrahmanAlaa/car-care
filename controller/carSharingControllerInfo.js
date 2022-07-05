@@ -32,7 +32,6 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
         const result = await upload.uploads(img.path);
         req.body.licensePhoto.push(result);
         fs.unlinkSync(img.path);
-
       })
     );
   }
