@@ -3,7 +3,7 @@ const Joi = require("@hapi/joi");
 const schema = new mongoose.Schema(
   {
     user: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
     gender: { type: String },
@@ -30,21 +30,13 @@ exports.validateCarSharingInfo = (req) => {
   return Joi.validate(req, schema);
 };
 
-// exports.validateUpdateCarSharingInfo = (req) => {
-//   const schema = Joi.object({
-//     email: Joi.string().email(),
-//     location: Joi,
-//     carMake: Joi.string().min(3).max(30),
-//     carModel: Joi.string().min(4).max(30),
-//     color: Joi.string().min(2).max(30),
-//     streetAddress: Joi.string().min(3).max(100),
-//     city: Joi.string().min(3).max(100),
-//     country: Joi.string().min(3).max(100),
-//     price: Joi.number(),
-//     title: Joi.string(),
-//     option: Joi.array(),
-//   });
-//   return Joi.validate(req, schema);
-// };
+exports.validateUpdateCarSharingInfo = (req) => {
+  const schema = Joi.object({
+    age: Joi.number(),
+    licensePhoto: Joi,
+    licenseCarPhoto: Joi.array().min(2).max(2),
+  });
+  return Joi.validate(req, schema);
+};
 
 exports.CarSharingInfo = CarSharingInfo;

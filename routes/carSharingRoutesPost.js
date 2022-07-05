@@ -6,20 +6,22 @@ const carSharingPost = require("../controller/carSharingControllerPost");
 
 router
   .route("/register")
-  .post(authUsers.auth, uploadMultiImage, carSharingPost.creatCarSharingPost);
+  .post(authUsers.auth, uploadMultiImage, carSharingPost.createCarSharingPost);
 
 router
   .route("/checkUser")
   .post(authUsers.auth, carSharingPost.checkUserIfRegister);
 
-router.route("/").get(carSharingPost.getCarSharingPost);
+router.route("/getAllPost").get(carSharingPost.getAllCarSharingPost);
+router.route("/getPostById/:id").get(carSharingPost.getCarSharingPostById);
+router.route("/getMyPost").get(authUsers.auth,carSharingPost.getCarSharingPost);
 
-// router
-// .route('/getUserInfo')
-// .get(authUsers.auth,carWash.getUserInfo)
+router
+.route('/getBooking')
+.get(authUsers.auth,carSharingPost.getBooking)
 
-// router
-// .route('/updateCarInfo')
-// .patch(authUsers.auth,carWash.updateCarWash)
+router
+.route('/acceptedBooking/:postBooking')
+.patch(authUsers.auth,carSharingPost.acceptBooking)
 
 module.exports = router;

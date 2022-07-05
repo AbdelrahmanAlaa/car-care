@@ -2,6 +2,7 @@ const {
   CarSharingPost,
   validateCarSharingPost,
 } = require("../models/carSharingModelPost");
+const {BookingCarSharing} = require('../models/BookingCarSharingModel')
 const asyncError = require("../middleware/asyncMiddleware");
 const { CarSharingInfo } = require("../models/carSharingModelInfo");
 // const { User } = require("../models/userModel");
@@ -14,7 +15,7 @@ exports.checkUserIfRegister = asyncError(async (req, res) => {
     res
       .status(200)
 
-      .json({ status: "failed", message: "you can creat Post now  " });
+      .json({ status: "failed", message: "you can create Post now  " });
   else
     res.status(200).json({
       status: "success",
@@ -22,12 +23,16 @@ exports.checkUserIfRegister = asyncError(async (req, res) => {
     });
 });
 
-exports.creatCarSharingPost = asyncError(async (req, res) => {
+exports.createCarSharingPost = asyncError(async (req, res) => {
   // const fileName = `carSharing-${req.user._id}-${Date.now()}`;
   const carSharingInfo = await CarSharingInfo.find({
     user: req.user._id,
   }).select("_id");
-  // console.log(carSharingInfo);
+  console.log(carSharingInfo)
+  if (carSharingInfo < 1)return res
+  .status(200) 
+  .json({ status: "failed", message: "you should create your information first !! " });
+  
   req.body.carSharingInfo = carSharingInfo;
   req.body.user = req.user._id;
   const { error } = validateCarSharingPost(req.body);
@@ -49,71 +54,64 @@ exports.creatCarSharingPost = asyncError(async (req, res) => {
       message: "you just have two trips in the same day ..",
     });
   const carSharingPost = await CarSharingPost.create(req.body);
+  res.status(200).json({
+    status:"success",
+    carSharingPost
+  })
+});
+
+exports.getAllCarSharingPost = asyncError(async (req, res) => {
+  const carSharingPost = await CarSharingPost.find().sort({ date: -1 });
   res.send(carSharingPost);
 });
 
 exports.getCarSharingPost = asyncError(async (req, res) => {
-  const carSharingPost = await CarSharingPost.find().sort({ date: -1 });
+  const carSharingPost = await CarSharingPost.find({user:req.user._id}).sort({ date: -1 });
+  if(!carSharingPost)return res.status(404).json({
+    status:"failed",
+    message:"InValid Id"
+  })
   res.send(carSharingPost);
 });
-// check if user register before or not
 
-//   const user = await User.findById(req.user._id);
+exports.getCarSharingPostById = asyncError(async (req, res) => {
+  const carSharingPost = await CarSharingPost.findById(req.params.id).sort({ date: -1 });
+  if(!carSharingPost)return res.status(404).json({
+    status:"failed",
+    message:"InValid Id"
+  })
+  res.send(carSharingPost);
+});
 
-//   const validate = await CarWash.findOne({ userId: user });
-//   if (validate)
-//     return res.status(400).json({
-//       status: "failed",
-//       message:
-//         "You are already registered ..! if you want to update your information you can go to your profile !! ",
-//     });
-// if (!req.body.email) req.body.email = user.email;
+exports.getBooking = asyncError(async(req,res)=>{
 
-//   let carWash = new CarWash({
-//
-//   });
-//   res.status(200).json({
-//     status: "success",
-//     message: "Request was a success",
-//     carWash,
-//   });
-//   await carWash.save();
-// });
+  const post = await CarSharingPost.find({user:req.user._id}).select("_id")
+  const booking = await BookingCarSharing.find({carSharingPostId:post})
+  if(!post || !booking)return res.status(404).json({
+    status:"failed",
+    message:"InValid id "
+  })
+  res.status(200).json({
+    status:"success",
+    booking
+  })
+})
 
-// exports.getUserInfo = asyncError(async (req, res) => {
-//   const user = await User.findById(req.user._id);
-//   res.json({
-//     status: "success",
-//     message: "Request was a success",
-//     message: _.pick(user, ["name", "email", "phone"]),
-//   });
-// });111111111111111
+exports.acceptBooking = asyncError(async(req,res)=>{
+  console.log(req.params.postBooking)
+const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
 
-// exports.getCarInfo = asyncError(async (req, res) => {
-//   const carWash = await CarWash.findOne({ userId: req.user._id });
-//   res.json({
-//     status: "success",
-//     message: "Request was a success",
-//     carWash: _.pick(carWash, ["carMake", "color", "carModel", "location"]),
-//   });
-// });
+if(booking.carSharingPostId.number >= many  ){
+return result = booking.carSharingPostId.number - many
+console.log(result)
+} 
+else{
+  return res.status(400).json({
+    status:"failed",
+    message:`this user just need ${booking.carSharingPostId.number}  ` 
+  })
+}
 
-// exports.updateCarWash = asyncError(async (req, res) => {
-//   const { error } = validateUpdateCarWash(req.body);
-//   if (error)
-//     return res.status(404).json({
-//       status: "failed",
-//       message: error.details[0].message,
-//     });
-//   const carWash = await CarWash.findOneAndUpdate(
-//     { userId: req.user._id },
-//     req.body,
-//     { new: true }
-//   );
+})
 
-//   res.json({
-//     status: "success",
-//     message: "Request was a success",
-//     carWash,
-//   });
-// });
+ 

@@ -3,12 +3,12 @@ const Joi = require("@hapi/joi");
 const schema = new mongoose.Schema(
   {
     carSharingInfo: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: [mongoose.Schema.Types.ObjectId],
       ref: "carSharingInfo",
     },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    from: { from: { type: String }, city: { type: String } },
-    to: { to: { type: String }, city: { type: String } },
+    fromCity: { type: String },
+   toCity: { type: String } ,
     date: { type: Date },
     number: { type: Number },
     price: { type: Number },
@@ -23,8 +23,8 @@ const CarSharingPost = mongoose.model("carSharingPost", schema);
 
 exports.validateCarSharingPost = (req) => {
   const schema = Joi.object({
-    // from: Joi.required(),
-    // to: Joi.required(),
+    fromCity: Joi.required(),
+    toCity: Joi.required(),
     carSharingInfo: Joi.required(),
     user: Joi.required(),
     date: Joi.date().greater("now").required(),
@@ -37,9 +37,8 @@ exports.validateCarSharingPost = (req) => {
 
 exports.validateUpdateCarSharingPost = (req) => {
   const schema = Joi.object({
-    // from: Joi,
-    // to: Joi,
-
+    fromCity: Joi,
+    toCity: Joi,
     date: Joi.date().greater("now"),
     number: Joi.number().min(1).max(4),
     price: Joi.number(),

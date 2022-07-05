@@ -1,16 +1,24 @@
 const {
   CarSharingInfo,
   validateCarSharingInfo,
+  validateUpdateCarSharingInfo
 } = require("../models/carSharingModelInfo");
 const { User } = require("../models/userModel");
 const asyncError = require("../middleware/asyncMiddleware");
 const upload = require("../middleware/cloudinary");
 const _ = require("lodash");
 
-exports.creatCarSharingInfo = asyncError(async (req, res) => {
+exports.createCarSharingInfo = asyncError(async (req, res) => {
   // const fileName = `carSharing-${req.user._id}-${Date.now()}`;
+  
   req.body.user = req.user._id;
-  const { error } = validateCarSharingInfo(req.body);
+  const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
+  if(checkUser) return res.status(400).json({
+    status:"failed",
+    message:"you already registered before !! you can go to your page to update or remove  "
+  })
+  
+    const { error } = validateCarSharingInfo(req.body);
   if (error)
     return res.status(404).json({
       status: "failed",
@@ -35,76 +43,44 @@ exports.creatCarSharingInfo = asyncError(async (req, res) => {
       })
     );
   }
+  if(!req.files.licenseCarPhoto || !req.files.licensePhoto) {
+    return res.status(404).json({
+      status:"failed",
+      message:"you should send your information correct"
+    })
+  }
   const carSharingInfo = await CarSharingInfo.create(req.body);
   res.send(carSharingInfo);
 });
 
 exports.getCarSharingInfo = asyncError(async (req, res) => {
-  // const page = req.query.page * 1 || 1;
-  // const limit = req.query.limit * 1 || 20;
-  // const skip = (page - 1) * limit;
-
   const carSharingInfo = await CarSharingInfo.find().sort({ date: -1 });
   res.send(carSharingInfo);
 });
-// check if user register before or not
+ 
+exports.getCarSharingInfoById = asyncError(async (req, res) => {
+  const carSharingInfo = await CarSharingInfo.findOne({user:req.params.id}).sort({ date: -1 });
+  if(!carSharingInfo)return res.status(400).json({
+    status:"failed",
+    message:"no id founded .. "
+  })
+  res.send(carSharingInfo);
+});
 
-//   const user = await User.findById(req.user._id);
+exports.deleteCareSharingInfo = asyncError(async(req,res)=>{
+  console.log(req.user._id)
+  const carSharing = await CarSharingInfo.findOneAndRemove({user:req.user._id} )
+  if(!carSharing)return res.status(404).json({
+    status:"failed",
+    message:"no id founded"
+  })
+  console.log(carSharing)
 
-//   const validate = await CarWash.findOne({ userId: user });
-//   if (validate)
-//     return res.status(400).json({
-//       status: "failed",
-//       message:
-//         "You are already registered ..! if you want to update your information you can go to your profile !! ",
-//     });
-// if (!req.body.email) req.body.email = user.email;
+  res.status(200).json({
+    status:"success",
+    message:"successfully deleted"
+  })
 
-//   let carWash = new CarWash({
-//
-//   });
-//   res.status(200).json({
-//     status: "success",
-//     message: "Request was a success",
-//     carWash,
-//   });
-//   await carWash.save();
-// });
+})
 
-// exports.getUserInfo = asyncError(async (req, res) => {
-//   const user = await User.findById(req.user._id);
-//   res.json({
-//     status: "success",
-//     message: "Request was a success",
-//     message: _.pick(user, ["name", "email", "phone"]),
-//   });
-// });111111111111111
 
-// exports.getCarInfo = asyncError(async (req, res) => {
-//   const carWash = await CarWash.findOne({ userId: req.user._id });
-//   res.json({
-//     status: "success",
-//     message: "Request was a success",
-//     carWash: _.pick(carWash, ["carMake", "color", "carModel", "location"]),
-//   });
-// });
-
-// exports.updateCarWash = asyncError(async (req, res) => {
-//   const { error } = validateUpdateCarWash(req.body);
-//   if (error)
-//     return res.status(404).json({
-//       status: "failed",
-//       message: error.details[0].message,
-//     });
-//   const carWash = await CarWash.findOneAndUpdate(
-//     { userId: req.user._id },
-//     req.body,
-//     { new: true }
-//   );
-
-//   res.json({
-//     status: "success",
-//     message: "Request was a success",
-//     carWash,
-//   });
-// });

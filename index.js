@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const { limiter } = require("./middleware/limiter");
 const carSharingPost = require("./routes/carSharingRoutesPost");
 const carSharingInfo = require("./routes/carSharingRoutesInfo");
+const BookingCarSharing = require("./routes/BookingCarSharingRoutes");
 const carWash = require("./routes/carWashRoutes");
 const users = require("./routes/userRoutes");
 const workers = require("./routes/workerRoutes");
@@ -27,6 +28,7 @@ app.use("/api/users", users);
 app.use("/api/worker", workers);
 app.use("/api/carWash", carWash);
 app.use("/api/carSharingPost", carSharingPost);
+app.use("/api/Booking", BookingCarSharing);
 app.use("/api/carSharingInfo", carSharingInfo);
 
 // "mongodb://localhost/graduation-project"
