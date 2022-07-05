@@ -36,6 +36,9 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       })
     );
   }
+  else{
+    return res.status(400).send("kda msh wasel llicenesPhoto")
+  }
   if (req.files.licenseCarPhoto) {
     req.body.licenseCarPhoto = [];
     await Promise.all(
