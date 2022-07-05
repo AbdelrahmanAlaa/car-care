@@ -92,7 +92,6 @@ exports.updateMyPhoto = asyncError(async (req, res) => {
     },
     { new: true }
   );
-  console.log(req.file);
   // delete my photo local after upload to cloudinary
   fs.unlinkSync(req.file.path);
 

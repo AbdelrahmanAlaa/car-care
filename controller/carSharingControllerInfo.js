@@ -7,17 +7,17 @@ const { User } = require("../models/userModel");
 const asyncError = require("../middleware/asyncMiddleware");
 const upload = require("../middleware/cloudinary");
 const _ = require("lodash");
-
+const fs = require('fs')
 exports.createCarSharingInfo = asyncError(async (req, res) => {
   // const fileName = `carSharing-${req.user._id}-${Date.now()}`;
   
   req.body.user = req.user._id;
   const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
-  if(checkUser) return res.status(400).json({
+  if(checkUser) return res.status(404).json({
     status:"failed",
     message:"you already registered before !! you can go to your page to update or remove  "
   })
-  
+  console.log(req.files.licensePhoto)
     const { error } = validateCarSharingInfo(req.body);
   if (error)
     return res.status(404).json({
@@ -31,6 +31,8 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       req.files.licensePhoto.map(async (img) => {
         const result = await upload.uploads(img.path);
         req.body.licensePhoto.push(result);
+        fs.unlinkSync(img.path);
+
       })
     );
   }
@@ -40,6 +42,8 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       req.files.licenseCarPhoto.map(async (img) => {
         const result = await upload.uploads(img.path);
         req.body.licenseCarPhoto.push(result);
+        fs.unlinkSync(img.path);
+
       })
     );
   }
@@ -50,6 +54,8 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
     })
   }
   const carSharingInfo = await CarSharingInfo.create(req.body);
+
+
 res.status(200).json({
   status:"success",
   carSharingInfo

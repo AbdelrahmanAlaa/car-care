@@ -25,7 +25,7 @@ exports.validateCarSharingInfo = (req) => {
     gender: Joi.string().required(),
     age: Joi.number().required(),
     licensePhoto: Joi,
-    licenseCarPhoto: Joi.array().min(2).max(2),
+    licenseCarPhoto: Joi,
   });
   return Joi.validate(req, schema);
 };
