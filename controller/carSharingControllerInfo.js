@@ -10,7 +10,7 @@ const _ = require("lodash");
 const fs = require('fs')
 exports.createCarSharingInfo = asyncError(async (req, res) => {
   console.log(req.body)
-  console.log(req.files)
+  console.log(req.file)
   
   req.body.user = req.user._id;
   const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
