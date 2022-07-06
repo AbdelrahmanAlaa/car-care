@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const authUsers = require("../controller/authUsersController");
-const { uploadSingleImage } = require("../middleware/multer");
+const { uploadMultiImage } = require("../middleware/multer");
 const carSharingInfo = require("../controller/carSharingControllerInfo");
 
 //route of car wash
 router
   .route("/register")
-  .post(authUsers.auth, uploadSingleImage, carSharingInfo.createCarSharingInfo);
+  .post(authUsers.auth, uploadMultiImage, carSharingInfo.createCarSharingInfo);
 
   router.route("/").get(authUsers.auth, carSharingInfo.getCarSharingInfo);
 

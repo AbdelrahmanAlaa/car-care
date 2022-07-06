@@ -29,9 +29,9 @@ exports.createCarSharingPost = asyncError(async (req, res) => {
     user: req.user._id,
   }).select("_id");
   console.log(carSharingInfo)
-  if (carSharingInfo < 1)return res
-  .status(200) 
-  .json({ status: "failed", message: "you should create your information first !! " });
+  // if (carSharingInfo < 1)return res
+  // .status(200) 
+  // .json({ status: "failed", message: "you should create your information first !! " });
   
   req.body.carSharingInfo = carSharingInfo;
   req.body.user = req.user._id;
