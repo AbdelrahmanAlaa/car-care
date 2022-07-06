@@ -11,8 +11,7 @@ const fs = require('fs')
 exports.createCarSharingInfo = asyncError(async (req, res) => {
   console.log(req.body)
   console.log(req.file)
-  console.log(req.files)
-  console.log(req.file.licenseCarPhoto)
+  
   req.body.user = req.user._id;
   const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
   if(checkUser) return res.status(404).json({
@@ -26,20 +25,20 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       message: error.details[0].message,
     });
   // upload photo and send to cloudinary to take url
-  // if (req.files.licensePhoto) {
-  //   req.body.licensePhoto = [];
-  //   await Promise.all(
-  //     req.files.licensePhoto.map(async (img) => {
-  //       const result = await upload.uploads(img.path);
-  //       req.body.licensePhoto.push(result);
-  //       fs.unlinkSync(img.path);
-  //     })
-  //   );
-  // }
-  // else{
-  //   return res.status(400).send("kda msh wasel llicenesPhoto")
-  // }
-  if (req.files.licenseCarPhoto) {
+  if (req.file.licensePhoto) {
+    req.body.licensePhoto = [];
+    await Promise.all(
+      req.files.licensePhoto.map(async (img) => {
+        const result = await upload.uploads(img.path);
+        req.body.licensePhoto.push(result);
+        fs.unlinkSync(img.path);
+      })
+    );
+  }
+  else{
+    return res.status(400).send("kda msh wasel llicenesPhoto")
+  }
+  if (req.file.licenseCarPhoto)  {
     req.body.licenseCarPhoto = [];
     await Promise.all(
       req.files.licenseCarPhoto.map(async (img) => {
@@ -50,7 +49,7 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       })
     );
   }
-  if(!req.files.licenseCarPhoto ) {
+  if(!req.files.licenseCarPhoto || !req.files.licensePhoto) {
     return res.status(404).json({
       status:"failed",
       message:"you should send your information correct"

@@ -12,7 +12,6 @@ const fileFilter= (req, file, cb) => {
     cb(null, true);
   } else {
     console.log("taher 5wal ")
-
     cb(null, false);
   }
 };
@@ -29,7 +28,7 @@ const fileFilterMulter= (req, file, cb) => {
 exports.uploadSingleImage = multer({
   storage: fileStorage,
   fileFilter: fileFilter,
-}).single("photo");
+}).single("licensePhoto");
 
 exports.uploadMultiImage = multer({
   storage: fileStorage,

@@ -9,7 +9,7 @@ const schema = new mongoose.Schema(
     gender: { type: String },
     age: { type: Number },
     checked: { type: Boolean, default: "0" },
-    // licensePhoto: [Array],
+    licensePhoto: [Array],
     licenseCarPhoto: [Array],
   },
   { timestamps: true }
@@ -25,6 +25,8 @@ exports.validateCarSharingInfo = (req) => {
     gender: Joi.string().required(),
     age: Joi.number().required(),
     licenseCarPhoto: Joi,
+    licensePhoto: Joi,
+
   });
   return Joi.validate(req, schema);
 };
