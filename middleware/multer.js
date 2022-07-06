@@ -11,6 +11,8 @@ const fileFilter= (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
+    console.log("taher 5wal ")
+
     cb(null, false);
   }
 };
@@ -19,6 +21,7 @@ const fileFilterMulter= (req, file, cb) => {
   if (files.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
+    console.log("taher 5wal ")
     cb(null, false);
   }
 };
