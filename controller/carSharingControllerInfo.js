@@ -25,19 +25,19 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       message: error.details[0].message,
     });
   // upload photo and send to cloudinary to take url
-  if (req.files.licensePhoto) {
-    req.body.licensePhoto = [];
-    await Promise.all(
-      req.files.licensePhoto.map(async (img) => {
-        const result = await upload.uploads(img.path);
-        req.body.licensePhoto.push(result);
-        fs.unlinkSync(img.path);
-      })
-    );
-  }
-  else{
-    return res.status(400).send("kda msh wasel llicenesPhoto")
-  }
+  // if (req.files.licensePhoto) {
+  //   req.body.licensePhoto = [];
+  //   await Promise.all(
+  //     req.files.licensePhoto.map(async (img) => {
+  //       const result = await upload.uploads(img.path);
+  //       req.body.licensePhoto.push(result);
+  //       fs.unlinkSync(img.path);
+  //     })
+  //   );
+  // }
+  // else{
+  //   return res.status(400).send("kda msh wasel llicenesPhoto")
+  // }
   if (req.files.licenseCarPhoto) {
     req.body.licenseCarPhoto = [];
     await Promise.all(
@@ -49,7 +49,7 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       })
     );
   }
-  if(!req.files.licenseCarPhoto || !req.files.licensePhoto) {
+  if(!req.files.licenseCarPhoto ) {
     return res.status(404).json({
       status:"failed",
       message:"you should send your information correct"
