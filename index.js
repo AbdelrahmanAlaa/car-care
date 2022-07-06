@@ -21,7 +21,7 @@ const app = express();
 app.use(cors());
 app.options("*", cors());
 app.use(express.json());
-app.use(express.static("images"));
+app.use(express.static("imagess"));
 
 app.use("/api", limiter);
 app.use("/api/users", users);
