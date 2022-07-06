@@ -10,6 +10,8 @@ const _ = require("lodash");
 const fs = require('fs')
 exports.createCarSharingInfo = asyncError(async (req, res) => {
   
+  console.log(req.files)
+  
   req.body.user = req.user._id;
   const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
   if(checkUser) return res.status(404).json({

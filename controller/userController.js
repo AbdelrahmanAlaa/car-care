@@ -79,7 +79,8 @@ exports.updatePassword = asyncError(async (req, res) => {
 });
 
 exports.updateMyPhoto = asyncError(async (req, res) => {
-
+  // send unique name to picture by id
+  console.log(req.file)
   const fileName = `user-${req.user._id}-${Date.now()}`;
 
   const result = await upload.uploads(req.file.path);
