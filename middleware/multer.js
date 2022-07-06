@@ -16,7 +16,7 @@ const fileFilter= (req, file, cb) => {
 };
 
 const fileFilterMulter= (req, file, cb) => {
-  if (file.mimetype.startsWith("images")) {
+  if (files.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
     cb(null, false);
