@@ -8,13 +8,20 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter= (req, file, cb) => {
-  if (file.mimetype.startsWith("images")) {
+  if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
     cb(null, false);
   }
 };
 
+const fileFilterMulter= (req, file, cb) => {
+  if (file.mimetype.startsWith("images")) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 exports.uploadSingleImage = multer({
   storage: fileStorage,
@@ -23,7 +30,7 @@ exports.uploadSingleImage = multer({
 
 exports.uploadMultiImage = multer({
   storage: fileStorage,
-  fileFilter: fileFilter,
+  fileFilterMulter: fileFilterMulter,
 }).fields([
   {
     name: "licenseCarPhoto",

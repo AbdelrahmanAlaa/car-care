@@ -9,7 +9,6 @@ const upload = require("../middleware/cloudinary");
 const _ = require("lodash");
 const fs = require('fs')
 exports.createCarSharingInfo = asyncError(async (req, res) => {
-  // const fileName = `carSharing-${req.user._id}-${Date.now()}`;
   
   req.body.user = req.user._id;
   const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
@@ -17,7 +16,6 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
     status:"failed",
     message:"you already registered before !! you can go to your page to update or remove  "
   })
-  console.log(req.files.licensePhoto)
     const { error } = validateCarSharingInfo(req.body);
   if (error)
     return res.status(404).json({
