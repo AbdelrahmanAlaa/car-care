@@ -7,13 +7,15 @@ const fileStorage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
+const fileFilterSingle = (req, file, cb) => {
+  if (file.mimetype.startsWith("images")) {
     cb(null, true);
   } else {
     cb(null, false);
   }
 };
+
+
 exports.uploadSingleImage = multer({
   storage: fileStorage,
   fileFilter: fileFilter,
