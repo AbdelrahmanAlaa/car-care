@@ -10,7 +10,7 @@ const _ = require("lodash");
 const fs = require('fs')
 exports.createCarSharingInfo = asyncError(async (req, res) => {
   
-  console.log(req.files)
+  // console.log(req.files)
   
   req.body.user = req.user._id;
   const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
@@ -85,7 +85,7 @@ exports.getCarSharingInfoById = asyncError(async (req, res) => {
 });
 
 exports.deleteCareSharingInfo = asyncError(async(req,res)=>{
-  console.log(req.user._id)
+  // console.log(req.user._id)
   const carSharing = await CarSharingInfo.findOneAndRemove({user:req.user._id} )
   if(!carSharing)return res.status(404).json({
     status:"failed",
