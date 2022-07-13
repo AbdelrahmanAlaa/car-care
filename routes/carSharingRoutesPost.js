@@ -15,13 +15,14 @@ router
 router.route("/getAllPost").get(carSharingPost.getAllCarSharingPost);
 router.route("/getPostById/:id").get(carSharingPost.getCarSharingPostById);
 router.route("/getMyPost").get(authUsers.auth,carSharingPost.getCarSharingPost);
+router.route("/deleteMyPost/:id").delete(authUsers.auth,carSharingPost.deleteMyPost);
 
 router
 .route('/getBooking')
 .get(authUsers.auth,carSharingPost.getBooking)
 
-// router
-// .route('/acceptedBooking/:postBooking')
-// .patch(authUsers.auth,carSharingPost.acceptBooking)
+router
+.route('/acceptedBooking/:postBooking/:check')
+.patch(authUsers.auth,carSharingPost.acceptBooking)
 
 module.exports = router;

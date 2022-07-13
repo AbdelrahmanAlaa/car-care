@@ -3,7 +3,7 @@ const Joi = require("@hapi/joi");
 const schema = new mongoose.Schema(
   {
     carSharingInfo: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: mongoose.Schema.Types.ObjectId,
       ref: "carSharingInfo",
     },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "user" },

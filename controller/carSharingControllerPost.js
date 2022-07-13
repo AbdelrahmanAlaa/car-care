@@ -25,10 +25,11 @@ exports.checkUserIfRegister = asyncError(async (req, res) => {
 
 exports.createCarSharingPost = asyncError(async (req, res) => {
   // const fileName = `carSharing-${req.user._id}-${Date.now()}`;
-  const carSharingInfo = await CarSharingInfo.find({
+  const carSharingInfo = await CarSharingInfo.findOne({
     user: req.user._id,
   }).select("_id");
-  console.log(carSharingInfo)
+  // console.log(carSharingInfo)
+
   // if (carSharingInfo < 1)return res
   // .status(200) 
   // .json({ status: "failed", message: "you should create your information first !! " });
@@ -58,11 +59,17 @@ exports.createCarSharingPost = asyncError(async (req, res) => {
     status:"success",
     carSharingPost
   })
+
 });
 
 exports.getAllCarSharingPost = asyncError(async (req, res) => {
-  const carSharingPost = await CarSharingPost.find().sort({ date: -1 });
-  res.send(carSharingPost);
+  const carSharingPost = await CarSharingPost.find().populate({path:'carSharingInfo',select:'checked -_id'})
+  .sort({ date: -1 });
+  
+  res.status(200).json({
+    status:"success",
+    carSharingPost
+  });
 });
 
 exports.getCarSharingPost = asyncError(async (req, res) => {
@@ -83,6 +90,19 @@ exports.getCarSharingPostById = asyncError(async (req, res) => {
   res.send(carSharingPost);
 });
 
+exports.deleteMyPost = asyncError(async(req,res)=>{
+  const carSharingPost = await CarSharingPost.findOneAndDelete({_id:req.params.id});
+  if(!carSharingPost)return res.status(404).json({
+    status:"failed",
+    message:"no id founded"
+  });
+  res.status(200).json({
+    status:"success",
+    message:"successfully deleted you post"
+
+  })
+})
+
 exports.getBooking = asyncError(async(req,res)=>{
 
   const post = await CarSharingPost.find({user:req.user._id}).select("_id")
@@ -97,21 +117,26 @@ exports.getBooking = asyncError(async(req,res)=>{
   })
 })
 
-// exports.acceptBooking = asyncError(async(req,res)=>{
-//   console.log(req.params.postBooking)
-// const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
+exports.acceptBooking = asyncError(async(req,res)=>{
+  console.log(req.params.postBooking)
+const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
+if(!booking)return res.status(404).json({
+  status:"failed",
+  message:"inValid id "
+})
+console.log(booking.carSharingPostId.number )
+if(booking.carSharingPostId.number >= booking.many  ){
 
-// if(booking.carSharingPostId.number >= many  ){
-// return result = booking.carSharingPostId.number - many
-// console.log(result)
-// } 
-// else{
-//   return res.status(400).json({
-//     status:"failed",
-//     message:`this user just need ${booking.carSharingPostId.number}  ` 
-//   })
-// }
+return result = booking.carSharingPostId.number - booking.many
 
-// })
+} 
+else{
+  return res.status(400).json({
+    status:"failed",
+    message:`this user just need ${booking.carSharingPostId.number}  ` 
+  })
+}
+
+})
 
  

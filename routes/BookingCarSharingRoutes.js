@@ -9,7 +9,7 @@ router
   
   router.route("/").get(authUsers.auth,BookingCarSharing.getBooking);
   router.route('/getAllBooking').get(BookingCarSharing.getAllBooking)
-  router.route("/:carSharingPostId").delete(authUsers.auth,BookingCarSharing.deleteBooking)
+  router.route("/:id").delete(authUsers.auth,BookingCarSharing.deleteBooking)
 // router
 //   .route("/checkUser")
 //   .post(authUsers.auth, carSharingPost.checkUserIfRegister);

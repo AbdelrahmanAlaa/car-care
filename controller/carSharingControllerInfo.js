@@ -9,8 +9,8 @@ const upload = require("../middleware/cloudinary");
 const _ = require("lodash");
 const fs = require('fs')
 exports.createCarSharingInfo = asyncError(async (req, res) => {
-  console.log(req.body)
-  console.log(req.file)
+  // console.log(req.body)
+  // console.log(req.files)
   
   req.body.user = req.user._id;
   const checkUser = await CarSharingInfo.findOne({user: req.body.user}) ;
@@ -25,7 +25,7 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
       message: error.details[0].message,
     });
   // upload photo and send to cloudinary to take url
-  if (req.file.licensePhoto) {
+  if (req.files.licensePhoto) {
     req.body.licensePhoto = [];
     await Promise.all(
       req.files.licensePhoto.map(async (img) => {
@@ -38,7 +38,7 @@ exports.createCarSharingInfo = asyncError(async (req, res) => {
   else{
     return res.status(400).send("kda msh wasel llicenesPhoto")
   }
-  if (req.file.licenseCarPhoto)  {
+  if (req.files.licenseCarPhoto)  {
     req.body.licenseCarPhoto = [];
     await Promise.all(
       req.files.licenseCarPhoto.map(async (img) => {
