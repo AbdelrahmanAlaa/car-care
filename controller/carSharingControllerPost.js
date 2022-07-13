@@ -120,15 +120,14 @@ exports.getBooking = asyncError(async(req,res)=>{
 exports.acceptBooking = asyncError(async(req,res)=>{
   console.log(req.params.postBooking)
 const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
+console.log(booking)
 if(!booking)return res.status(404).json({
   status:"failed",
   message:"inValid id "
 })
 console.log(booking.carSharingPostId.number )
 if(booking.carSharingPostId.number >= booking.many  ){
-
 return result = booking.carSharingPostId.number - booking.many
-
 } 
 else{
   return res.status(400).json({
@@ -136,6 +135,9 @@ else{
     message:`this user just need ${booking.carSharingPostId.number}  ` 
   })
 }
+console.log(result)
+booking.carSharingPostId.number = result;
+
 
 })
 
