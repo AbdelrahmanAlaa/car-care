@@ -68,10 +68,10 @@ exports.getAllBooking = asyncError(async(req,res)=>{
 
 exports.deleteBooking = asyncError(async(req,res)=>{
  
-  const booking = await BookingCarSharing.findOneAndRemove({_id:req.params.id})
+  const booking = await BookingCarSharing.findOneAndRemove({_id:req.params.carSharingPostId})
   if(!booking) return res.status(400).json({
     status:"failed",
-    message:"  "
+    message:"No Booking for you in this Post "
   })
   res.status(200).json({
     status:"success",
