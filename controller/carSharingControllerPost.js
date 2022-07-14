@@ -107,6 +107,7 @@ exports.getBooking = asyncError(async(req,res)=>{
 
   const post = await CarSharingPost.find({user:req.user._id}).select("_id")
   const booking = await BookingCarSharing.find({carSharingPostId:post})
+  
   if(!post || !booking)return res.status(404).json({
     status:"failed",
     message:"InValid id "
@@ -120,23 +121,31 @@ exports.getBooking = asyncError(async(req,res)=>{
 exports.acceptBooking = asyncError(async(req,res)=>{
   console.log(req.params.postBooking)
 const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
-console.log(booking)
+// console.log(booking)
 if(!booking)return res.status(404).json({
   status:"failed",
   message:"inValid id "
 })
 console.log(booking.carSharingPostId.number )
-if(booking.carSharingPostId.number >= booking.many  ){
-return result = booking.carSharingPostId.number - booking.many
+if(booking.carSharingPostId.number >= booking.many ||booking.carSharingPostId.number != 0 ){
+const result = booking.carSharingPostId.number - booking.many
+console.log(result)
+const newResult = await CarSharingPost.findOneAndUpdate({carSharingPostId:booking.carSharingPostId} ,
+{number:result}
+  )
+  res.send(newResult)
+// booking.carSharingPostId.number = result 
+
+
 } 
+
 else{
   return res.status(400).json({
     status:"failed",
     message:`this user just need ${booking.carSharingPostId.number}  ` 
   })
 }
-console.log(result)
-booking.carSharingPostId.number = result;
+
 
 
 })
