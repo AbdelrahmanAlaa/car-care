@@ -32,7 +32,7 @@ const CarWash = mongoose.model("carWash", schema);
 
 exports.validateCarWash = (req) => {
   const schema = Joi.object({
-    email: Joi.string().email(),
+    email: Joi,
     location: Joi,
     carModel: Joi.string().min(4).max(30).required(),
     streetAddress: Joi.string().min(3).max(100),
