@@ -62,14 +62,60 @@ exports.createCarSharingPost = asyncError(async (req, res) => {
 
 });
 
+
+// exports.getProduct = asyncError(async (req, res) => {
+//   const page = req.query.page * 1 || 1;
+//   const limit = req.query.limit * 1 || 20;
+//   const skip = (page - 1) * limit;
+
+//   // let filterObject = {};
+//   // if (req.params.categoryId) filterObject = { category: req.params.categoryId };
+
+//   const product = await Product.find().skip(skip).limit(limit);
+
+//   if (!product) res.status(404).json({ message: "this id is not found ..! " });
+
+//   res.status(200).json({ result: product.length, page, product });
+// });
+
+
+
 exports.getAllCarSharingPost = asyncError(async (req, res) => {
-  const carSharingPost = await CarSharingPost.find().populate({path:'carSharingInfo',select:'checked -_id'})
-  .sort({ date: -1 });
-  
+  // console.log(from)
+
+  if(req.query.from||req.query.to){
+    const from = req.query.from;
+    const to = req.query.to;
+  const carSharingPost = await CarSharingPost.find({
+    $and:[
+      {fromCity:from},
+      {toCity:to}
+    ]
+  })
+  console.log(carSharingPost)
+  if(!carSharingPost)return res.status(404).json({
+    status:"failed",
+    message:"no trips for this !!!"
+  })
   res.status(200).json({
     status:"success",
     carSharingPost
   });
+}
+
+else {
+  const carSharingPost = await CarSharingPost.find().populate({path:'carSharingInfo',select:'checked -_id'})
+  .sort({ date: -1 });
+  if(!carSharingPost)return res.status(404).json({
+    status:"failed",
+    message:"inValid request"
+  })
+  res.status(200).json({
+    status:"success",
+    carSharingPost
+  });
+}
+  
 });
 
 exports.getCarSharingPost = asyncError(async (req, res) => {
@@ -89,6 +135,7 @@ exports.getCarSharingPostById = asyncError(async (req, res) => {
   })
   res.send(carSharingPost);
 });
+
 
 exports.deleteMyPost = asyncError(async(req,res)=>{
   const carSharingPost = await CarSharingPost.findOneAndDelete({_id:req.params.id});
