@@ -8,11 +8,11 @@ const schema = new mongoose.Schema(
       ref: "user",
     },
     location: {
-      type: {
-        type: String,
-        default: "point"
-      },
-      coordinates: [Number],
+      // type: {
+      //   type: String,
+      //   default: "point"
+      // },
+      type: [Number],
     },
     streetAddress: { type: String },
     city: { type: String },
