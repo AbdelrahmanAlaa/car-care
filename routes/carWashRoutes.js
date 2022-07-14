@@ -4,7 +4,7 @@ const carWash = require("../controller/carWashController");
 const authUsers = require("../controller/authUsersController");
 
 //route of car wash
-router.route("/register").post(authUsers.auth, carWash.creatCarWash);
+router.route("/register").post(authUsers.auth, carWash.createCarWash);
 
 router.route("/getCarInfo").get(authUsers.auth, carWash.getCarInfo);
 

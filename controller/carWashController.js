@@ -3,13 +3,13 @@ const asyncError = require("../middleware/asyncMiddleware");
 const { User } = require("../models/userModel");
 const _ = require("lodash");
 
-exports.creatCarWash = asyncError(async (req, res) => {
-  const { error } = validateCarWash(req.body);
-  if (error)
-    return res.status(404).json({
-      status: "failed",
-      message: error.details[0].message,
-    });
+exports.createCarWash = asyncError(async (req, res) => {
+  // const { error } = validateCarWash(req.body);
+  // if (error)
+  //   return res.status(404).json({
+  //     status: "failed",
+  //     message: error.details[0].message,
+  //   });
 
   // check if user register before or not
 

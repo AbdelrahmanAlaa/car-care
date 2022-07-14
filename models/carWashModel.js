@@ -30,21 +30,21 @@ schema.index({ name: 1 });
 
 const CarWash = mongoose.model("carWash", schema);
 
-exports.validateCarWash = (req) => {
-  const schema = Joi.object({
-    email: Joi,
-    location: Joi,
-    carModel: Joi.string().min(4).max(30).required(),
-    streetAddress: Joi.string().min(3).max(100),
-    city: Joi.string().min(3).max(100),
-    country: Joi.string().min(3).max(100),
-    totalPrice: Joi.number().required(),
-    pricing: Joi.number().required(),
-    title: Joi.string().required(),
-    option: Joi.array().required(),
-  });
-  return Joi.validate(req, schema);
-};
+// exports.validateCarWash = (req) => {
+//   const schema = Joi.object({
+//     email: Joi,
+//     location: Joi,
+//     carModel: Joi.string().min(4).max(30).required(),
+//     streetAddress: Joi.string().min(3).max(100),
+//     city: Joi.string().min(3).max(100),
+//     country: Joi.string().min(3).max(100),
+//     totalPrice: Joi.number().required(),
+//     pricing: Joi.number().required(),
+//     title: Joi.string().required(),
+//     option: Joi.array().required(),
+//   });
+//   return Joi.validate(req, schema);
+// };
 
 exports.validateUpdateCarWash = (req) => {
   const schema = Joi.object({
