@@ -23,6 +23,6 @@ router
 
 router
 .route('/acceptedBooking/:postBooking/:check')
-.patch(authUsers.auth,carSharingPost.acceptBooking)
+.patch(carSharingPost.acceptBooking)
 
 module.exports = router;
