@@ -62,24 +62,6 @@ exports.createCarSharingPost = asyncError(async (req, res) => {
 
 });
 
-
-// exports.getProduct = asyncError(async (req, res) => {
-//   const page = req.query.page * 1 || 1;
-//   const limit = req.query.limit * 1 || 20;
-//   const skip = (page - 1) * limit;
-
-//   // let filterObject = {};
-//   // if (req.params.categoryId) filterObject = { category: req.params.categoryId };
-
-//   const product = await Product.find().skip(skip).limit(limit);
-
-//   if (!product) res.status(404).json({ message: "this id is not found ..! " });
-
-//   res.status(200).json({ result: product.length, page, product });
-// });
-
-
-
 exports.getAllCarSharingPost = asyncError(async (req, res) => {
   // console.log(from)
 
@@ -173,22 +155,24 @@ if(!booking)return res.status(404).json({
   status:"failed",
   message:"inValid id "
 })
-console.log(booking.carSharingPostId.number )
-if(booking.carSharingPostId.number >= booking.many ||booking.carSharingPostId.number != 0 ){
+
+if(booking.carSharingPostId.number >= booking.many ){
 const result = booking.carSharingPostId.number - booking.many
 
-const newResult = await CarSharingPost.findOneAndUpdate({carSharingPostId:booking.carSharingPostId},{number:result})
-  res.send(newResult)
-
-// booking.carSharingPostId.number = result 
-
-
+ await CarSharingPost.findOneAndUpdate({_id:booking.carSharingPostId},{number:result})
+ await BookingCarSharing.findOneAndUpdate({_id:req.params.postBooking} , {checked:req.params.check})
+ 
+res.status(200).json({
+  status:"success",
+  message:"You have been receiving your partner in the trip .."
+})
+  
 } 
 
 else{
   return res.status(400).json({
     status:"failed",
-    message:`this user just need ${booking.carSharingPostId.number}  ` 
+    message:`this user just need ${booking.carSharingPostId.number} ` 
   })
 }
 

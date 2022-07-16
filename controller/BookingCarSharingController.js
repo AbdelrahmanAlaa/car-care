@@ -47,7 +47,7 @@ Booking
 
 
 exports.getBooking = asyncError(async(req,res)=>{
-  const booking = await BookingCarSharing.findOne({userId:req.user._id});
+  const booking = await BookingCarSharing.find({userId:req.user._id});
   if(!booking)return res.status(404).json({
     status:"failed",
     message:"you not have booking yet !!"
