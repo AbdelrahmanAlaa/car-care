@@ -136,6 +136,9 @@ exports.getBooking = asyncError(async(req,res)=>{
 
   const post = await CarSharingPost.find({user:req.user._id}).select("_id")
   const booking = await BookingCarSharing.find({carSharingPostId:post})
+  .populate({path:"userId" , select:"name"})
+  .populate({path:"carSharingPostId" , select:"fromCity toCity"});
+
   
   if(!post || !booking)return res.status(404).json({
     status:"failed",
