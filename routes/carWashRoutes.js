@@ -6,11 +6,13 @@ const authUsers = require("../controller/authUsersController");
 //route of car wash
 router.route("/register").post(authUsers.auth, carWash.createCarWash);
 
-router.route("/getCarInfo").get(authUsers.auth, carWash.getCarInfo);
+router.route("/getMyCarWash").get(authUsers.auth, carWash.getCaWash);
+
+router.route("/getAllCarWash").get( carWash.getAllCarWash);
 
 router.route("/getUserInfo").get(authUsers.auth, carWash.getUserInfo);
 
-router.route("/deletedCarInfo").patch(authUsers.auth, carWash.deleteCarWash);
+router.route("/deletedCarWash").delete(authUsers.auth, carWash.deleteCarWash);
 
 // router
 // .route('/updateCarInfo')

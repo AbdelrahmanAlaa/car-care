@@ -1,9 +1,8 @@
 const { BookingCarSharing, validateBookingCarSharing } = require("../models/BookingCarSharingModel");
 const asyncError = require("../middleware/asyncMiddleware");
-const { User } = require("../models/userModel");
 const { CarSharingPost } = require("../models/carSharingModelPost");
 const _ = require("lodash");
-const mongoose = require('mongoose') 
+
 
 exports.CreateBooking = asyncError(async (req, res) => {
   req.body.userId = req.user._id;
@@ -20,6 +19,11 @@ exports.CreateBooking = asyncError(async (req, res) => {
     });
 
 const checkPostId = await CarSharingPost.findById(req.body.carSharingPostId)
+console.log(checkPostId)
+if(checkPostId.user == req.body.userId)return res.status(404).json({
+  status:'failed',
+  message:"you can't booking for you post "
+})
 if(!checkPostId)return res.status(404).send("no id like this ")
 
 const checkBooking = await BookingCarSharing.find({
@@ -35,7 +39,6 @@ if(checkBooking.length >= 1)return res.status(400).json({
 
 const Booking = new BookingCarSharing(req.body)
 
-
 await Booking.save();
 res.status(200).json({
   status:"success",
@@ -45,20 +48,19 @@ Booking
 });
 
 
-
 exports.getBooking = asyncError(async(req,res)=>{
 
-  const booking = await BookingCarSharing.find({userId:req.user._id});
-  console.log(booking)
+  const booking = await BookingCarSharing.find({userId:req.user._id}).populate({path:"userId",select:"phone"});
   if(!booking)return res.status(404).json({
     status:"failed",
     message:"you not have booking yet !!"
   })
   res.status(200).json({
     status:"success",
-    booking
-  })
+    booking 
 })
+})
+
 exports.getAllBooking = asyncError(async(req,res)=>{
   const booking = await BookingCarSharing.find();
  
