@@ -86,8 +86,10 @@ exports.getAllCarSharingPost = asyncError(async (req, res) => {
 }
 
 else {
-  const carSharingPost = await CarSharingPost.find().populate({path:'carSharingInfo',select:'checked -_id '})
-  .sort({ createdAt:'-1'});
+  const carSharingPost = await CarSharingPost.find({date:{$gte:Date.now()}})
+  .populate({path:'carSharingInfo',select:'checked -_id '})
+  .sort({ createdAt:'-1'})
+  
   if(!carSharingPost)return res.status(404).json({
     status:"failed",
     message:"inValid request"
