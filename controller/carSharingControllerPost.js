@@ -73,7 +73,7 @@ exports.getAllCarSharingPost = asyncError(async (req, res) => {
       {fromCity:from},
       {toCity:to}
     ]
-  }).populate("userId")
+  }).populate({path:'carSharingInfo',select:'checked -_id '})
 
   if(!carSharingPost)return res.status(404).json({
     status:"failed",
