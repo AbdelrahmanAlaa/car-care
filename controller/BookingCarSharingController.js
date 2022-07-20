@@ -50,11 +50,15 @@ Booking
 
 exports.getBooking = asyncError(async(req,res)=>{
 
-  const booking = await BookingCarSharing.find({userId:req.user._id}).populate({path:"userId",select:"phone"});
+  const booking = await BookingCarSharing.find({userId:req.user._id})
+  .populate({path:"userId",select:"phone"}) 
+  .populate({path:"carSharingPostId",select:"fromCity toCity"});
+  
   if(!booking)return res.status(404).json({
     status:"failed",
     message:"you not have booking yet !!"
   })
+
   res.status(200).json({
     status:"success",
     booking 

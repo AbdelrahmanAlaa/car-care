@@ -6,7 +6,7 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "carSharingInfo",
     },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     fromCity: { type: String },
    toCity: { type: String } ,
     date: { type: Date },

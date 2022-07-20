@@ -73,7 +73,7 @@ exports.getAllCarSharingPost = asyncError(async (req, res) => {
       {fromCity:from},
       {toCity:to}
     ]
-  })
+  }).populate("userId")
 
   if(!carSharingPost)return res.status(404).json({
     status:"failed",
@@ -87,9 +87,11 @@ exports.getAllCarSharingPost = asyncError(async (req, res) => {
 
 else {
   const carSharingPost = await CarSharingPost.find({date:{$gte:Date.now()}})
+  .populate({path:"user",select:"url name"})
   .populate({path:'carSharingInfo',select:'checked -_id '})
   .sort({ createdAt:'-1'})
-  
+  console.log(carSharingPost)
+
   if(!carSharingPost)return res.status(404).json({
     status:"failed",
     message:"inValid request"
@@ -153,7 +155,6 @@ exports.getBooking = asyncError(async(req,res)=>{
 })
 
 exports.acceptBooking = asyncError(async(req,res)=>{
-
  
   const booking = await BookingCarSharing.findById(req.params.postBooking).populate("carSharingPostId")
 
